@@ -98,11 +98,10 @@ export const story = defineType({
             name: 'AssociatedCollection',
             type: 'reference',
             to: [{type: 'collectionOrb'}],
-            // 
-            validation: (rule) => rule.required(),
+            // validation: (rule) => rule.required(),
         }),
         defineField({
-            name: 'storySlug',
+            name: 'slug',
             type: 'slug',
             options: {source: 'title'},
             validation: (rule) => rule.required()

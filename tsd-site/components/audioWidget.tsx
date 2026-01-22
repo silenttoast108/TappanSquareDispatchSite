@@ -2,7 +2,7 @@
 
 import TextLoop from './textloop'
 import { useState, useRef, useEffect } from "react";
-import Slider from '@mui/material/slider'
+// import Slider from '@mui/material/slider'
 // import Math from "next"
 import {
     RotateCcw,
