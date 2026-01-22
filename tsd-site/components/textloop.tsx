@@ -17,16 +17,19 @@ export default function TextLoop({message, font}: TLInput) {
   }, [message]);
 
   return (
-    <div ref={containerRef} className={`group flex ${font} col-span-2 h-[1.5em] [mask-image:linear-gradient(to_right,transparent,black_5%,black_90%,transparent)]`}>
+    <div ref={containerRef} className={`group flex ${font} col-span-2 h-[1.5em] ${isOverflowing
+      ? '[mask-image:linear-gradient(to_right,transparent,black_5%,black_90%,transparent)] justify-start'
+      : 'justify-center'}`}>
       { isOverflowing
       ? <div className={`group-hover:animate-text-slide flex flex-row items-start leading-[1.5em] bg-[#02021C]`}>
           <span ref={textRef} className='ml-6 whitespace-nowrap'>{message}</span>
           <span className='ml-6 whitespace-nowrap'>{message}</span>  
         </div>
-      : <div className="pl-[30%] flex w-full jusitfy-center items-center">
-        {/* {find better fix for this} */}
+      : <div className="">
+        {/* {find better fix for this} pl-[30%] flex w-full jusitfy-center items-center */}
           <span ref={textRef} className='whitespace-nowrap'>{message}</span>
-        </div> }
+        </div> 
+        }
     </div>
   );
 }
