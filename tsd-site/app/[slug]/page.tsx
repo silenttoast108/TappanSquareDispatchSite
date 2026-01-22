@@ -87,7 +87,7 @@ export default async function storiesPage({
             </li>
           ))}
         </ul>
-      <footer className="border fixed bottom-0 w-full py-2 px-5 border-slate-300 rounded-lg bg-black">
+      <footer className="border-t fixed bottom-0 w-full py-2 px-5 border-slate-300 bg-[#02021C]">
         <AudioWidget trackArr={trackArr} font={epilogue.className} skip={true}/>
         {/* {changing type to be audiotrack []}. Think abt maybe passing starting track */}
       </footer>
