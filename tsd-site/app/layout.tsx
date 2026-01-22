@@ -40,15 +40,15 @@ export default function RootLayout({
       <body
         //className={`${epilogue.className} ${epilogue.className} antialiased`}
       >
-      <header className={`${epilogue.className} antialiased flex flex-row justify-center py-4 sm:px-6 text-purple-400 text-[30px] bg-black w-full border-b border-b-1 border-b-slate-300`}>
+      <header className={`${epilogue.className} antialiased flex flex-row justify-center py-4 sm:px-6 text-purple-300 text-[30px] bg-black w-full border-b border-b-1 border-b-slate-300`}>
         <div className="flex flex-0 justify-start ml-5">
           <BackButton />
         </div>
         <div className="flex flex-1 justify-center">
           <Link className="hover:text-purple-50" href="/">Home</Link>
-          <div className="mx-4 h-9 w-0.75 bg-purple-400"></div>
+          <div className="mx-4 h-9 w-0.75 bg-purple-300"></div>
           <Link className="hover:text-purple-50" href="/abt">About TSD</Link>
-          <div className="mx-4 h-9 w-0.75 bg-purple-400"></div>
+          <div className="mx-4 h-9 w-0.75 bg-purple-300"></div>
           <Link className="hover:text-purple-50" href="/contact">Contact Us</Link>
         </div>
       </header>

@@ -1,6 +1,6 @@
 'use client'
 
-// import { PortableText, type SanityDocument } from "next-sanity";
+import TextLoop from './textloop'
 import React, { useState, useRef, useEffect } from "react";
 // import Math from "next"
 import {
@@ -11,6 +11,7 @@ import {
     RewindIcon,
     PauseIcon,
 } from "lucide-react";
+
 interface AWInput {
     trackArr: audioTrack[],
     font: string,
@@ -141,12 +142,16 @@ export function AudioWidget({trackArr, font, skip}: AWInput) {
     //rember to initialize audioRef
     return (
         <div className="flex flex-col gap-y-4 py-4 w-full items-center justify-center mx-auto">  
-            <div className="flex flex-row gap-x-20 items-center gap-x-4">
-                <h1 className={`text-xl whitespace-nowrap ${font}`}>{trackArr[activeTrackInd].title}</h1>
-                <h2 className={`${font}`}>{formatTime(trackTime, duration)}</h2>
-                <h1 className={`text-xl whitespace-nowrap ${font}`}>{trackArr[activeTrackInd].contributors}</h1>
+            <div className="grid grid-cols-5 gap-x-4">
+                {/* <h1 className={`col-span-2 text-xl whitespace-nowrap overflow-hidden ${font}`}>{trackArr[activeTrackInd].title}</h1> */}
+                {/* {Add if statement that makes sense. Should use grid length for calc} */}
+                <TextLoop message = {trackArr[activeTrackInd].title} font={font} />
+                <h2 className={`justify-self-center bg-[#02021C]${font}`}>{formatTime(trackTime, duration)}</h2>
+                <TextLoop message = {`${trackArr[activeTrackInd].contributors}`} font={font} />
+
+                {/* <h1 className={`col-span-2 text-xl whitespace-nowrap overflow-hidden ${font}`}>{trackArr[activeTrackInd].contributors}</h1> */}
             </div>
-            <progress className="w-7/8 mx-40 h-[5px] [&::-webkit-progress-bar]:rounded-lg [&::-webkit-progress-value]:rounded-lg [&::-webkit-progress-bar]:bg-slate-300 [&::-webkit-progress-value]:bg-purple-400 [&::-moz-progress-bar]:bg-purple-300" value={progress}></progress>
+            <progress className="w-7/8 mx-40 h-[5px] [&::-webkit-progress-bar]:rounded-lg [&::-webkit-progress-value]:rounded-lg [&::-webkit-progress-bar]:bg-slate-900 [&::-webkit-progress-value]:bg-slate-300 [&::-moz-progress-bar]:bg-purple-300" value={progress}></progress>
             <div className="flex flex-row gap-x-6 hover:cursor-pointer items-center">
                 <div onClick={hopBackward} className="flex flex-row gap-x-2 text-sm select-none items-center">
                     <h2 className={`${font} text-m`}>15</h2>
