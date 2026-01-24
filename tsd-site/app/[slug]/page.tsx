@@ -40,7 +40,7 @@ export default async function storiesPage({
 }) {
     const collectionPosts = await client.fetch<SanityDocument>(STORIES_QUERY, await params, options);
     const story = await client.fetch<SanityDocument>(STORY_QUERY, await params, options);
-    console.log(story);
+    // console.log(story);
     const slug = (await params).slug
 
     if (!(collectionPosts.length == 0)) {//logic for clicking on a collection
