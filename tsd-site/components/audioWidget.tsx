@@ -1,7 +1,7 @@
 'use client'
 
 import TextLoop from './textloop'
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, forwardRef } from "react";
 // import Slider from '@mui/material/slider'
 // import Math from "next"
 import {
@@ -11,9 +11,12 @@ import {
     PlayIcon,
     RewindIcon,
     PauseIcon,
+    X
 } from "lucide-react";
 
-interface AWInput {
+interface AWprops {
+    open: boolean,
+    startTrackInd: number,
     trackArr: audioTrack[],
     font: string,
     skip: boolean
@@ -26,20 +29,16 @@ export interface audioTrack {
 }
 
 
-//might need to add upload handler somewhere???
-export function AudioWidget({trackArr, font, skip}: AWInput) {
+//forwardRef allows audio widget to be modified by parent DOM nodes
+export const AudioWidget = forwardRef<HTMLDivElement, AWprops>(({open, startTrackInd, trackArr, font, skip}: AWprops, ref) => {
 
-    //var trackArr: audioTrack[] = [];
-    var startTrack: audioTrack | null = null;
-
-    const [isPlaying, setIsPlaying] = useState(false)//might change this if there is a way to activate widget
-    const [activeTrackInd, setActiveTrackInd] = useState(0); // this should correspond to start track
-    const [trackTime, setTrackTime] = useState(0); //prob should format somewhere
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [activeTrackInd, setActiveTrackInd] = useState(startTrackInd);
+    const [trackTime, setTrackTime] = useState(0);
     const [duration, setDuration] = useState(0);
     const [progress, setProgress] = useState(0);
     const audioRef = useRef<HTMLAudioElement|null>(null);
-    //progress?
-    //time?
+
     
     const playPause = () => {
         if (isPlaying) {
@@ -138,7 +137,6 @@ export function AudioWidget({trackArr, font, skip}: AWInput) {
     }
 
     useEffect(() => {//might need to set ref.current.currentTime to 0
-        console.log('useEffect Invoked');
         if (audioRef.current) {       
             audioRef.current.pause();
             audioRef.current.src = trackArr[activeTrackInd].src;
@@ -152,37 +150,56 @@ export function AudioWidget({trackArr, font, skip}: AWInput) {
     //figure out how to add dragging capabiliyties with progress...
     //rember to initialize audioRef
 
-
     return (
-        <div className="flex flex-col gap-y-4 py-4 w-full items-center justify-center mx-auto">  
-            <div className="grid grid-cols-5 gap-x-4">
-                {/* <h1 className={`col-span-2 text-xl whitespace-nowrap overflow-hidden ${font}`}>{trackArr[activeTrackInd].title}</h1> */}
-                <TextLoop message = {trackArr[activeTrackInd].title} font={font} />       
-                <h2 className={`justify-self-center bg-[#02021C]${font}`}>{formatTime(trackTime, duration)}</h2>
-                <TextLoop message = {`${trackArr[activeTrackInd].contributors}`} font={font} />
-                {/* <h1 className={`col-span-2 text-xl whitespace-nowrap overflow-hidden ${font}`}>{trackArr[activeTrackInd].contributors}</h1> */}
-            </div>
-            {/* solve at a later date <Slider size='small' aria-label="Volume" value={progress*100} onChange={handleSlider} /> */}
-            <progress className="w-7/8 mx-40 h-[5px] [&::-webkit-progress-bar]:rounded-lg [&::-webkit-progress-value]:rounded-lg [&::-webkit-progress-bar]:bg-slate-900 [&::-webkit-progress-value]:bg-slate-300 [&::-moz-progress-bar]:bg-purple-300" value={progress}></progress>
-            <div className="flex flex-row gap-x-6 hover:cursor-pointer items-center">
-                <div onClick={hopBackward} className="flex flex-row gap-x-2 text-sm select-none items-center">
-                    <h2 className={`${font} text-m`}>15</h2>
-                    <RotateCcw />
+        <div className = {`${open? 'visibility:hidden' : 'visibility:visible'}
+                border-t fixed bottom-0 w-full py-2 px-5 border-slate-300 bg-[#02021C]`}
+            >
+                
+            <div className="flex flex-col gap-y-4 py-4 w-full items-center justify-center mx-auto">
+                 <div className = 'flex flex-row justify-center items-center'>
+                    <div className="grid grid-cols-5 gap-x-4 items-center">
+                        <TextLoop message = {trackArr[activeTrackInd].title} font={font} />       
+                        <h2 className={`justify-self-center bg-[#02021C]${font}`}>{formatTime(trackTime, duration)}</h2>
+                        <TextLoop message = {`${trackArr[activeTrackInd].contributors}`} font={font} />
+                    </div>
+                    {   skip? 
+                            <span className='flex-initial hover:cursor-pointer border border-[#02021C] hover:border-slate-300 rounded-md ml-4 mb-1'>
+                                <X/>
+                            </span>
+                        : <></>
+                    }
+                    
+                </div> 
+                
+                
+                {/* solve at a later date <Slider size='small' aria-label="Volume" value={progress*100} onChange={handleSlider} /> */}
+                <progress className="w-7/8 mx-40 h-[5px] [&::-webkit-progress-bar]:rounded-lg [&::-webkit-progress-value]:rounded-lg [&::-webkit-progress-bar]:bg-slate-900 [&::-webkit-progress-value]:bg-slate-300 [&::-moz-progress-bar]:bg-purple-300" value={progress}></progress>
+                <div className="flex flex-row gap-x-6 hover:cursor-pointer items-center">
+                    <div onClick={hopBackward} className="flex flex-row gap-x-2 text-sm select-none items-center">
+                        <h2 className={`${font} text-m`}>15</h2>
+                        <RotateCcw />
+                    </div>
+                    {skip? <h2 onClick={skipBackwards} className="text-md"><RewindIcon /></h2> : <></>}
+                    <div className="p-4 rounded-full bg-[#F8E663]">
+                        <h2 onClick={playPause} className="text-lg font-bold">{isPlaying? <PauseIcon className='text-black strokeWidth-[3]'/>: <PlayIcon className='text-black strokeWidth-[3]'/>}</h2>
+                    </div>
+                    {skip? <h2 onClick={skipForward} className="text-md"><FastForward /></h2> : <></>}
+                    <div onClick={hopForward} className="flex flex-row gap-x-2 text-sm select-none items-center">
+                        <RotateCw />
+                        <h2 className={`${font} text-m`}>15</h2>
+                    </div>
+                    <audio ref={audioRef}
+                        onTimeUpdate={handleTimeUpdate}
+                        onLoadedMetadata={handleMetaData}>
+                    </audio>
                 </div>
-                {skip? <h2 onClick={skipBackwards} className="text-md"><RewindIcon /></h2> : <></>}
-                <div className="p-4 rounded-full bg-[#F8E663]">
-                    <h2 onClick={playPause} className="text-lg font-bold">{isPlaying? <PauseIcon className='text-black strokeWidth-[3]'/>: <PlayIcon className='text-black strokeWidth-[3]'/>}</h2>
-                </div>
-                {skip? <h2 onClick={skipForward} className="text-md"><FastForward /></h2> : <></>}
-                <div onClick={hopForward} className="flex flex-row gap-x-2 text-sm select-none items-center">
-                    <RotateCw />
-                    <h2 className={`${font} text-m`}>15</h2>
-                </div>
-                <audio ref={audioRef}
-                    onTimeUpdate={handleTimeUpdate}
-                    onLoadedMetadata={handleMetaData}>
-                </audio>
             </div>
         </div>
     )
-}
+})
+
+// export function AudioWidget({open, startTrackInd, trackArr, font, skip}: AWprops) {
+
+//     //var trackArr: audioTrack[] = [];
+    
+// }

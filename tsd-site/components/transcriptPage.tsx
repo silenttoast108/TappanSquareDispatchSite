@@ -26,27 +26,25 @@ export interface TPInput {
     images: SanityImageAssetDocument[],
     audioURL: string,
     script: PortableTextBlock,
-
 }
 
 export default function TranscriptPage({title, contributors, date, description, spotifyURL, images, audioURL, script}: TPInput) {
+    // console.log(date)
     return (
         <main className='flex flex-col items-center min-h-screen bg-black px-[10%]'>
             <div className='w-full flex items-center border-b border-b-1 border-b-slate-300'>
                 <h1 className={`${f1.className} pl-4 antialiased text-purple-100 text-[50px] my-4 text-start`}>{title}</h1>
             </div>
             {/* <hr className="w-full h-[1] "/> */}
-            <div className = {`${f2.className} antialiased flex flex-col jusitfy-start gap-y-2 border-b border-b-1 border-b-slate-300 pt-2 pb-4`}>
+            <div className = {`${f2.className} w-full antialiased flex flex-col jusitfy-start gap-y-2 border-b border-b-1 border-b-slate-300 pt-2 pb-4`}>
                 <p className='pl-4 text-xs text-slate-600'>{new Date(date).toISOString()}</p>
                 <p className='pl-4 text-m text-slate-300'>{`By ${contributors}`}</p>
                 <div className='pl-4 italic text-slate-300'>
                     {Array.isArray(description) && <PortableText value={description} />}
                 </div>               
             </div>
-            {/* <hr className="border border-solid border-slate-300"/> */}
+          
             <div className={`${f2.className} pl-4 antialiased w-full flex flex-row justify-start text-purple-300 text-lg gap-x-4 py-4`}>
-                {/* <Link className="hover:text-purple-50" href="/">
-                </Link> */}
                 <div className="flex flex-row items-center justify-center gap-x-3 border rounded-xl border-purple-300 hover:border-slate-300 hover:text-slate-300 px-2">
                         <ShareButton/>
                     </div>
@@ -88,16 +86,22 @@ export default function TranscriptPage({title, contributors, date, description, 
                     alt={`Image for ${title}`}
                 />
             </div>
-            <div className={`${f2.className} antialiased mb-45 pl-4 border-t border-t-1 border-t-slate-300 pt-4 `}>
+            <div className={`${f2.className} antialiased mb-45 pl-4 border-t border-t-1 border-t-slate-300 pt-4 overflow-hidden`}>
                 {Array.isArray(script) && <PortableText value={script} />}
             </div>
-            <footer className="border-t fixed bottom-0 w-full py-2 px-5 border-slate-300 bg-[#02021C]">
-                <AudioWidget trackArr={[{
-                    title: title,
-                    contributors: contributors,
-                    src: audioURL
-                }]} font={f2.className} skip={false}/>
-            </footer>
+            {/* <footer className="border-t fixed bottom-0 w-full py-2 px-5 border-slate-300 bg-[#02021C]"> */}
+                <AudioWidget 
+                    trackArr={[{
+                        title: title,
+                        contributors: contributors,
+                        src: audioURL
+                    }]} 
+                    font={f2.className} 
+                    skip={false} 
+                    open={false} 
+                    startTrackInd={0}
+                />
+            {/* </footer> */}
         </main>
     )
 }

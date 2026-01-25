@@ -1,20 +1,27 @@
 import { useRef, useState, useLayoutEffect } from "react";
+import { useWindowSize } from '@/utils/updateWindowHook';
+//should update animation automatically... output is not meant to affect styling attributes of dive container
 
 interface TLInput {
     message: string,
     font: string,
 }
-// [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]
 export default function TextLoop({message, font}: TLInput) {
   const [isOverflowing, setIsOverflowing] = useState(false);//not sure if this is allowed
+  const [_size, setSize] = useState({ width: 0, height: 0 });
   const containerRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLSpanElement>(null);
+
+  const sizeStr = useWindowSize();
+  // setSize(useWindowSize());
 
   useLayoutEffect(() => {
     if (textRef.current && containerRef.current) {
       setIsOverflowing(textRef.current?.offsetWidth > containerRef.current.offsetWidth)
     }
-  }, [message]);
+    setSize(sizeStr)
+  }, [message, sizeStr]); //used to have size dep. took away from too many re-renders
+
 
   return (
     <div ref={containerRef} className={`group flex ${font} col-span-2 h-[1.5em] ${isOverflowing
@@ -26,8 +33,7 @@ export default function TextLoop({message, font}: TLInput) {
           <span className='ml-6 whitespace-nowrap'>{message}</span>  
         </div>
       : <div className="">
-        {/* {find better fix for this} pl-[30%] flex w-full jusitfy-center items-center */}
-          <span ref={textRef} className='whitespace-nowrap'>{message}</span>
+          <span ref={textRef} className={`whitespace-nowrap`}>{message}</span>
         </div> 
         }
     </div>
