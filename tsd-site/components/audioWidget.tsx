@@ -151,7 +151,7 @@ export const AudioWidget = forwardRef<HTMLDivElement, AWprops>(({open, startTrac
     //rember to initialize audioRef
 
     return (
-        <div className = {`${open? 'visibility:hidden' : 'visibility:visible'}
+        <div className = {`${open? 'visible' : 'invisible'}
                 border-t fixed bottom-0 w-full py-2 px-5 border-slate-300 bg-[#02021C]`}
             >
                 
@@ -162,13 +162,13 @@ export const AudioWidget = forwardRef<HTMLDivElement, AWprops>(({open, startTrac
                         <h2 className={`justify-self-center bg-[#02021C]${font}`}>{formatTime(trackTime, duration)}</h2>
                         <TextLoop message = {`${trackArr[activeTrackInd].contributors}`} font={font} />
                     </div>
-                    {   skip? 
+                    {   
+                        skip? 
                             <span className='flex-initial hover:cursor-pointer border border-[#02021C] hover:border-slate-300 rounded-md ml-4 mb-1'>
                                 <X/>
                             </span>
                         : <></>
-                    }
-                    
+                    }  
                 </div> 
                 
                 
