@@ -1,6 +1,6 @@
 'use client'
 import { PortableText, PortableTextBlock, SanityImageAssetDocument } from "next-sanity"
-import { AudioWidget, audioTrack } from "./audioWidget"
+import { AudioWidget, audioTrack, AWprops} from "./audioWidget"
 import { useState, useRef, useEffect, use } from "react";
 import Link from "next/link";
 import { urlFor } from "@/app/sanity/sanityImageUrl";
@@ -32,13 +32,24 @@ export default function PlaylistPage({
 
     const[widgetOpen, setWidgetOpen] = useState(false);
     const[trackInd, setTrackInd] = useState(0);
-    const widgetRef = useRef<HTMLDivElement>(null) //need to use forward ref in widget file. Use HTMLDiv to get correct auto complete
+   const widgetRef = useRef<AWprops | null>(null) //need to use forward ref in widget file. Use HTMLDiv to get correct auto complete
+
+    // const handleClose = () => {
+    //     setWidgetOpen(false);
+    // }
+
+    const handleStorySelect = (i: number) => {
+        if (widgetRef.current) {
+            setWidgetOpen(true);
+            setTrackInd(i);
+            widgetRef.current.open = widgetOpen;
+            widgetRef.current.startTrackInd = trackInd;
+        }
+        alert('pressed')
+    }
 
     // const handleOpenWidget = () => {
-    //     if (!widgetOpen) {
-    //         setWidgetOpen(true);
-    //         //do smth with ref...
-    //     }
+    //     setWidgetOpen(true);
     // }
 
     // const handleCloseWidget = () => {
@@ -48,15 +59,9 @@ export default function PlaylistPage({
     //     }
     // }
     
-    useEffect(() => {
-        if (!widgetOpen) {
-            setWidgetOpen(true);
-            //do smth with ref...
-        } else {
-            setWidgetOpen(false);
-            //do smth with ref
-        }
-    }, [trackInd])
+    // useEffect(() => {
+    //     setWidgetOpen(!widgetOpen)
+    // }, [trackInd])
 
     const trackArr: audioTrack[] = [] //might make more sense to pass individual track to widget & rerender on skip...
     storyPosts.map((post) => {
@@ -67,7 +72,7 @@ export default function PlaylistPage({
         });
     });
 
-    return(
+    return (
         <main className="flex flex-col min-h-screen bg-black items-start">
             <div className="flex flex-row items-center justify-center w-full text-center">
                 <Link href={`/${slug}`} className = {`${fonts[0]} antialiased text-purple-100 text-[50px] my-8`}>
@@ -77,7 +82,7 @@ export default function PlaylistPage({
             <ul className="gap-y-4 px-10 mx-auto w-7/8 mb-50">
                 {storyPosts.map((post: storyPost, i) => (
                 <li className="my-2" key={i}>
-                    <div className={`${fonts[1]} group antialiased flex flex-row p-2 my-2 justify-between items-center`}>
+                    <div className={`${fonts[1]} z-1 group antialiased flex flex-row p-2 my-2 justify-between items-center`}>
                         <Link href={`/${slug}/${post.storySlug}`}>
                             <div className="flex flex-col gap-y-2">
                                 <h2 className="group-hover:underline text-xl font-semibold">{post.title || "null"}</h2>
@@ -87,7 +92,7 @@ export default function PlaylistPage({
                             </div>               
                             </div>
                         </Link>
-                            <Link href={post.spotifyURL} className="relative w-[150px] flex-shrink-0 rounded-full">
+                        <button onClick={() => handleStorySelect(i)} className="relative z-50 w-[150px] flex-shrink-0 h-[150px] aspect-circle rounded-full overflow-hidden cursor-pointer">
                             <img
                                 className="rounded-full transition-filter duration-300 group-hover:brightness-50"
                                 src={urlFor(post.images[0])
@@ -107,14 +112,14 @@ export default function PlaylistPage({
                                 </svg>
                                 </div>
                             </div>
-                        </Link>
+                        </button>
                     </div>
                     <hr className="border border-solid border-slate-300"></hr>
                 </li>
                 ))}
             </ul>
             {/* <footer className="border-t fixed bottom-0 w-full py-2 px-5 border-slate-300 bg-[#02021C]"> */}
-            <AudioWidget trackArr={trackArr} font={fonts[1]} skip={true} open={false} startTrackInd={0}/>
+            <AudioWidget ref={widgetRef} trackArr={trackArr} font={fonts[1]} skip={true} open={widgetOpen} startTrackInd={trackInd || 0} playing={widgetOpen}/>
             {/* </footer> */}
         </main>);
 }

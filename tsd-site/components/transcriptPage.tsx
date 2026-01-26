@@ -98,8 +98,9 @@ export default function TranscriptPage({title, contributors, date, description, 
                     }]} 
                     font={f2.className} 
                     skip={false} 
-                    open={false} 
+                    open={true} 
                     startTrackInd={0}
+                    playing={false}
                 />
             {/* </footer> */}
         </main>

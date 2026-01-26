@@ -1,7 +1,7 @@
 'use client'
 
 import TextLoop from './textloop'
-import { useState, useRef, useEffect, forwardRef } from "react";
+import { useState, useRef, useEffect, forwardRef, Ref, RefObject } from "react";
 // import Slider from '@mui/material/slider'
 // import Math from "next"
 import {
@@ -14,12 +14,14 @@ import {
     X
 } from "lucide-react";
 
-interface AWprops {
+export interface AWprops {//hopefully this fixes ref...
     open: boolean,
     startTrackInd: number,
     trackArr: audioTrack[],
     font: string,
-    skip: boolean
+    skip: boolean,
+    playing: boolean,
+    ref?: RefObject<AWprops | null>
 }
 
 export interface audioTrack {
@@ -30,16 +32,21 @@ export interface audioTrack {
 
 
 //forwardRef allows audio widget to be modified by parent DOM nodes
-export const AudioWidget = forwardRef<HTMLDivElement, AWprops>(({open, startTrackInd, trackArr, font, skip}: AWprops, ref) => {
+// export const AudioWidget = forwardRef<HTMLDivElement, AWprops>(({open, startTrackInd, trackArr, font, skip}: AWprops, ref) => {
+export function AudioWidget({open, startTrackInd, trackArr, font, skip, playing}: AWprops) { //may need to alter somethings for ref to work , ref: Ref<AWprops> | undefined
 
-    const [isPlaying, setIsPlaying] = useState(false);
+    const [isOpen, setIsOpen] = useState(open);
+    const [isPlaying, setIsPlaying] = useState(playing);
     const [activeTrackInd, setActiveTrackInd] = useState(startTrackInd);
     const [trackTime, setTrackTime] = useState(0);
     const [duration, setDuration] = useState(0);
     const [progress, setProgress] = useState(0);
     const audioRef = useRef<HTMLAudioElement|null>(null);
 
-    
+    const handleClose = () => {
+        setIsOpen(false)
+    }
+
     const playPause = () => {
         if (isPlaying) {
             setIsPlaying(false);
@@ -151,7 +158,8 @@ export const AudioWidget = forwardRef<HTMLDivElement, AWprops>(({open, startTrac
     //rember to initialize audioRef
 
     return (
-        <div className = {`${open? 'visible' : 'invisible'}
+        <div 
+            className = {`${isOpen? 'visible' : 'invisible'}
                 border-t fixed bottom-0 w-full py-2 px-5 border-slate-300 bg-[#02021C]`}
             >
                 
@@ -164,7 +172,7 @@ export const AudioWidget = forwardRef<HTMLDivElement, AWprops>(({open, startTrac
                     </div>
                     {   
                         skip? 
-                            <span className='flex-initial hover:cursor-pointer border border-[#02021C] hover:border-slate-300 rounded-md ml-4 mb-1'>
+                            <span onClick={handleClose} className='flex-initial hover:cursor-pointer border border-[#02021C] hover:border-slate-300 rounded-md ml-4 mb-1'>
                                 <X/>
                             </span>
                         : <></>
@@ -196,7 +204,7 @@ export const AudioWidget = forwardRef<HTMLDivElement, AWprops>(({open, startTrac
             </div>
         </div>
     )
-})
+}
 
 // export function AudioWidget({open, startTrackInd, trackArr, font, skip}: AWprops) {
 
