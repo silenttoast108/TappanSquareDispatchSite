@@ -31,39 +31,17 @@ export default function PlaylistPage({
 
     const[widgetOpen, setWidgetOpen] = useState(false);
     const[trackInd, setTrackInd] = useState(0);
-   //const widgetRef = useRef<AWprops | null>(null) //need to use forward ref in widget file. Use HTMLDiv to get correct auto complete
-
-    // const handleClose = () => {
-    //     setWidgetOpen(false);
-    // }
 
     const handleStorySelect = (i: number) => {
-        // if (widgetRef.current) {
             setWidgetOpen(true);
             setTrackInd(i);
-           console.log(widgetOpen);
-           console.log(trackInd)
-            // alert('pressed')
-        // }
-       
+        //    console.log(widgetOpen);
+        //    console.log(trackInd)
     }
 
-    // const handleOpenWidget = () => {
-    //     setWidgetOpen(true);
-    // }
-
-    // const handleCloseWidget = () => {
-    //     if (widgetOpen) {
-    //         setWidgetOpen(false);
-    //         //do smth with ref
-    //     }
-    // }
-    
-    // useEffect(() => {
-    //     setWidgetOpen(!widgetOpen)
-    // }, [trackInd])
-
-    console.log(`again in playlist file ${widgetOpen}`)
+    const handleClose = () => {
+        setWidgetOpen(false);
+    }
 
     const trackArr: audioTrack[] = [] //might make more sense to pass individual track to widget & rerender on skip...
     storyPosts.map((post) => {
@@ -77,11 +55,14 @@ export default function PlaylistPage({
     return (
         <main className="flex flex-col min-h-screen bg-black items-start">
             <div className="flex flex-row items-center justify-center w-full text-center">
-                <Link href={`/${slug}`} className = {`${fonts[0]} antialiased text-purple-100 text-[50px] my-8`}>
+                {/* <Link href={`/${slug}`} className = {`${fonts[0]} antialiased text-purple-100 text-[50px] my-8`}>
                     {storyPosts[0].collection}
-                </Link>
+                </Link> */}
+                <div className='px-20 w-full flex items-center justify-center border-b border-b-1 border-b-slate-300'>
+                    <h1 className={`${fonts[0]} pl-4 antialiased text-slate-300 text-[50px] my-4 text-start`}>{storyPosts[0].collection}</h1>
+                </div>
             </div>
-            <ul className="gap-y-4 px-10 mx-auto w-7/8 mb-50">
+            <ul className="gap-y-4 px-20 mx-auto w-full mb-50">
                 {storyPosts.map((post: storyPost, i) => (
                 <li className="my-2" key={i}>
                     <div className={`${fonts[1]} z-1 group antialiased flex flex-row p-2 my-2 justify-between items-center`}>
@@ -94,10 +75,7 @@ export default function PlaylistPage({
                                 </div>               
                             </div>
                         </Link>
-                        <button onClick={(e) => {
-                            // e.preventDefault;
-                            // e.stopPropagation;
-                            handleStorySelect(i)}} className="relative w-[150px] h-[150px] flex-shrink-0 rounded-full overflow-hidden cursor-pointer appearance-none border-none bg-gray-200">
+                        <button onClick={(e) => {handleStorySelect(i)}} className="relative w-[150px] h-[150px] flex-shrink-0 rounded-full overflow-hidden cursor-pointer appearance-none border-none bg-gray-200">
                             <img
                                 className="rounded-full transition-filter duration-300 group-hover:brightness-50"
                                 src={urlFor(post.images[0])
@@ -123,6 +101,6 @@ export default function PlaylistPage({
                 </li>
                 ))}
             </ul>
-            <AudioWidget trackArr={trackArr} font={fonts[1]} skip={true} open={widgetOpen} startTrackInd={trackInd || 0} playing={widgetOpen}/>
+            <AudioWidget onClose={(handleClose)} trackArr={trackArr} font={fonts[1]} skip={true} open={widgetOpen} startTrackInd={trackInd || 0} playing={widgetOpen}/>
         </main>);
 }

@@ -1,5 +1,5 @@
-// import { useState } from "react";
-// import { usePathname } from "next/navigation";
+// 'use client'
+
 import { Oleo_Script, Epilogue } from "next/font/google";
 import {SanityImageAssetDocument, PortableText, PortableTextBlock, type SanityDocument } from "next-sanity";
 import Link from "next/link";
@@ -7,6 +7,7 @@ import { Download, Share2 } from 'lucide-react'
 import { urlFor } from "@/app/sanity/sanityImageUrl";
 import { AudioWidget } from "./audioWidget";
 import ShareButton from "./shareButton";
+// import { useRef, useEffect, useState, useLayoutEffect } from "react";
 
 const f2 = Epilogue({
     subsets: ["latin"]
@@ -29,13 +30,21 @@ export interface TPInput {
 }
 
 export default function TranscriptPage({title, contributors, date, description, spotifyURL, images, audioURL, script}: TPInput) {
-    // console.log(date)
+    // const [imageWidth, setImageWidth] = useState(0);
+    // const imageRef = useRef<SanityImageAssetDocument | null>(null);
+
+    // useLayoutEffect(() => {
+    //     if (imageRef.current) {
+    //         // setImageWidth(imageRef.current.size)
+    //         console.log(imageRef.current.size)
+    //     }
+    // }, [images])
+
     return (
-        <main className='flex flex-col items-center min-h-screen bg-black px-[10%]'>
+        <main className='flex flex-col items-center min-h-screen bg-black mx-[10%] border-x border-x-1 border-x-slate-300'>
             <div className='w-full flex items-center border-b border-b-1 border-b-slate-300'>
-                <h1 className={`${f1.className} pl-4 antialiased text-purple-100 text-[50px] my-4 text-start`}>{title}</h1>
+                <h1 className={`${f1.className} pl-4 antialiased text-slate-300 text-[50px] my-4 text-start`}>{title}</h1>
             </div>
-            {/* <hr className="w-full h-[1] "/> */}
             <div className = {`${f2.className} w-full antialiased flex flex-col jusitfy-start gap-y-2 border-b border-b-1 border-b-slate-300 pt-2 pb-4`}>
                 <p className='pl-4 text-xs text-slate-600'>{new Date(date).toISOString()}</p>
                 <p className='pl-4 text-m text-slate-300'>{`By ${contributors}`}</p>
@@ -86,10 +95,9 @@ export default function TranscriptPage({title, contributors, date, description, 
                     alt={`Image for ${title}`}
                 />
             </div>
-            <div className={`${f2.className} antialiased mb-45 pl-4 border-t border-t-1 border-t-slate-300 pt-4 overflow-hidden`}>
+            <div className={`${f2.className} antialiased mb-45 px-4 border-t border-t-1 border-t-slate-300 pt-4 overflow-hidden`}>
                 {Array.isArray(script) && <PortableText value={script} />}
             </div>
-            {/* <footer className="border-t fixed bottom-0 w-full py-2 px-5 border-slate-300 bg-[#02021C]"> */}
                 <AudioWidget 
                     trackArr={[{
                         title: title,
@@ -102,7 +110,6 @@ export default function TranscriptPage({title, contributors, date, description, 
                     startTrackInd={0}
                     playing={false}
                 />
-            {/* </footer> */}
         </main>
     )
 }

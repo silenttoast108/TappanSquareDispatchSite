@@ -1,7 +1,7 @@
 'use client'
 
 import TextLoop from './textloop'
-import { useState, useRef, useEffect, } from "react";
+import { useState, useRef, useEffect, MouseEventHandler, } from "react";
 // import Slider from '@mui/material/slider'
 // import Math from "next"
 import {
@@ -21,6 +21,7 @@ export interface AWprops {
     font: string,
     skip: boolean,
     playing: boolean,
+    onClose?: MouseEventHandler
 }
 
 export interface audioTrack {
@@ -32,10 +33,10 @@ export interface audioTrack {
 
 //forwardRef allows audio widget to be modified by parent DOM nodes
 // export const AudioWidget = forwardRef<HTMLDivElement, AWprops>(({open, startTrackInd, trackArr, font, skip}: AWprops, ref) => {
-export function AudioWidget({open, startTrackInd, trackArr, font, skip, playing}: AWprops) { //may need to alter somethings for ref to work , ref: Ref<AWprops> | undefined
+export function AudioWidget({open, startTrackInd, trackArr, font, skip, playing, onClose}: AWprops) { //may need to alter somethings for ref to work , ref: Ref<AWprops> | undefined
 
-    console.log(`widget prop: ${open}`);
-    console.log(`widget prop: ${startTrackInd}`)
+    // console.log(`widget prop: ${open}`);
+    // console.log(`widget prop: ${startTrackInd}`)
 
     const [isOpen, setIsOpen] = useState(open);
     const [isPlaying, setIsPlaying] = useState(playing);
@@ -45,9 +46,11 @@ export function AudioWidget({open, startTrackInd, trackArr, font, skip, playing}
     const [progress, setProgress] = useState(0);
     const audioRef = useRef<HTMLAudioElement|null>(null);
 
-    const handleClose = () => {
-        setIsOpen(false);
-    }
+    // const handleClose = () => {
+    //     //setIsOpen(false);
+    //     open = false;
+    //     console.log(open);
+    // }
 
     const playPause = () => {
         if (isPlaying) {
@@ -166,8 +169,8 @@ export function AudioWidget({open, startTrackInd, trackArr, font, skip, playing}
     //handleTimeUpdate!!
     //figure out how to add dragging capabiliyties with progress...
     //rember to initialize audioRef
-    console.log(`widget useState: ${isOpen}`);
-    console.log(`widget useState: ${activeTrackInd}`)
+    // console.log(`widget useState: ${isOpen}`);
+    // console.log(`widget useState: ${activeTrackInd}`)
 
     return (
         <div 
@@ -184,7 +187,7 @@ export function AudioWidget({open, startTrackInd, trackArr, font, skip, playing}
                     </div>
                     {   
                         skip? 
-                            <span onClick={handleClose} className='flex-initial hover:cursor-pointer border border-[#02021C] hover:border-slate-300 rounded-md ml-4 mb-1'>
+                            <span onClick={onClose} className='flex-initial hover:cursor-pointer border border-[#02021C] hover:border-slate-300 rounded-md ml-4 mb-1'>
                                 <X/>
                             </span>
                         : <></>

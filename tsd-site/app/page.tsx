@@ -38,9 +38,9 @@ export default async function Home() {
   // console.log(sortedPosts)
   return (
     <div className = "flex flex-col items-center min-h-screen bg-black">
-      <Link href='/' className = {`${f1.className} my-8 antialiased text-purple-100 text-[50px]`}>
-        The Tappan Square Dispatch
-      </Link>
+      <div className='w-full flex items-center justify-center border-b border-b-1 border-b-slate-300 mb-4'>
+        <h1 className={`${f1.className} pl-4 antialiased text-slate-300 text-[50px] my-4 text-start cursor-pointer`}>The Tappan Square Dispatch</h1>
+      </div>
       <ul className="flex flex-col gap-y-4 px-10 mx-auto max-w">
         {sortedPosts.map((post: SanityDocument) => (
           <li className="flex flex-row my-2" key={post._id}>
