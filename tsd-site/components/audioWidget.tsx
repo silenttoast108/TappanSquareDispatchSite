@@ -1,7 +1,7 @@
 'use client'
 
 import TextLoop from './textloop'
-import { useState, useRef, useEffect, forwardRef, Ref, RefObject } from "react";
+import { useState, useRef, useEffect, } from "react";
 // import Slider from '@mui/material/slider'
 // import Math from "next"
 import {
@@ -14,14 +14,13 @@ import {
     X
 } from "lucide-react";
 
-export interface AWprops {//hopefully this fixes ref...
+export interface AWprops {
     open: boolean,
     startTrackInd: number,
     trackArr: audioTrack[],
     font: string,
     skip: boolean,
     playing: boolean,
-    ref?: RefObject<AWprops | null>
 }
 
 export interface audioTrack {
@@ -35,6 +34,9 @@ export interface audioTrack {
 // export const AudioWidget = forwardRef<HTMLDivElement, AWprops>(({open, startTrackInd, trackArr, font, skip}: AWprops, ref) => {
 export function AudioWidget({open, startTrackInd, trackArr, font, skip, playing}: AWprops) { //may need to alter somethings for ref to work , ref: Ref<AWprops> | undefined
 
+    console.log(`widget prop: ${open}`);
+    console.log(`widget prop: ${startTrackInd}`)
+
     const [isOpen, setIsOpen] = useState(open);
     const [isPlaying, setIsPlaying] = useState(playing);
     const [activeTrackInd, setActiveTrackInd] = useState(startTrackInd);
@@ -44,7 +46,7 @@ export function AudioWidget({open, startTrackInd, trackArr, font, skip, playing}
     const audioRef = useRef<HTMLAudioElement|null>(null);
 
     const handleClose = () => {
-        setIsOpen(false)
+        setIsOpen(false);
     }
 
     const playPause = () => {
@@ -74,15 +76,15 @@ export function AudioWidget({open, startTrackInd, trackArr, font, skip, playing}
         return `${tMinutes}:${(tSeconds<10)? '0': ''}${tSeconds}/${dMinutes}:${(dSeconds<10)? '0': ''}${dSeconds}`
     }
 
-    const handleSlider = (_e: Event, value: number) => {
-        if (audioRef.current) {
-            const prog = cleanDivide(value, 100);
-            const newTime = prog*duration;
-            audioRef.current.currentTime = prog*duration;
-            setTrackTime(prog*duration);
-            setProgress(prog);
-        }
-    }
+    // const handleSlider = (_e: Event, value: number) => {
+    //     if (audioRef.current) {
+    //         const prog = cleanDivide(value, 100);
+    //         const newTime = prog*duration;
+    //         audioRef.current.currentTime = prog*duration;
+    //         setTrackTime(prog*duration);
+    //         setProgress(prog);
+    //     }
+    // }
 
     const handleTimeUpdate = () => {//update progress?
         if (audioRef.current) {
@@ -143,6 +145,14 @@ export function AudioWidget({open, startTrackInd, trackArr, font, skip, playing}
         }
     }
 
+    useEffect(() => {//this is because internal state is reset during component re-mount in dev mode
+        setIsOpen(open);
+    }, [open]);
+
+    useEffect(() => {//same reason
+        setActiveTrackInd(startTrackInd)
+    }, [startTrackInd]);
+
     useEffect(() => {//might need to set ref.current.currentTime to 0
         if (audioRef.current) {       
             audioRef.current.pause();
@@ -156,6 +166,8 @@ export function AudioWidget({open, startTrackInd, trackArr, font, skip, playing}
     //handleTimeUpdate!!
     //figure out how to add dragging capabiliyties with progress...
     //rember to initialize audioRef
+    console.log(`widget useState: ${isOpen}`);
+    console.log(`widget useState: ${activeTrackInd}`)
 
     return (
         <div 
@@ -178,7 +190,6 @@ export function AudioWidget({open, startTrackInd, trackArr, font, skip, playing}
                         : <></>
                     }  
                 </div> 
-                
                 
                 {/* solve at a later date <Slider size='small' aria-label="Volume" value={progress*100} onChange={handleSlider} /> */}
                 <progress className="w-7/8 mx-40 h-[5px] [&::-webkit-progress-bar]:rounded-lg [&::-webkit-progress-value]:rounded-lg [&::-webkit-progress-bar]:bg-slate-900 [&::-webkit-progress-value]:bg-slate-300 [&::-moz-progress-bar]:bg-purple-300" value={progress}></progress>

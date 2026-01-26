@@ -1,10 +1,9 @@
 'use client'
 import { PortableText, PortableTextBlock, SanityImageAssetDocument } from "next-sanity"
-import { AudioWidget, audioTrack, AWprops} from "./audioWidget"
+import { AudioWidget, audioTrack} from "./audioWidget"
 import { useState, useRef, useEffect, use } from "react";
 import Link from "next/link";
 import { urlFor } from "@/app/sanity/sanityImageUrl";
-import { tr } from "motion/react-client";
 
 interface PLPInput {
     storyPosts: storyPost[],
@@ -32,20 +31,21 @@ export default function PlaylistPage({
 
     const[widgetOpen, setWidgetOpen] = useState(false);
     const[trackInd, setTrackInd] = useState(0);
-   const widgetRef = useRef<AWprops | null>(null) //need to use forward ref in widget file. Use HTMLDiv to get correct auto complete
+   //const widgetRef = useRef<AWprops | null>(null) //need to use forward ref in widget file. Use HTMLDiv to get correct auto complete
 
     // const handleClose = () => {
     //     setWidgetOpen(false);
     // }
 
     const handleStorySelect = (i: number) => {
-        if (widgetRef.current) {
+        // if (widgetRef.current) {
             setWidgetOpen(true);
             setTrackInd(i);
-            widgetRef.current.open = widgetOpen;
-            widgetRef.current.startTrackInd = trackInd;
-        }
-        alert('pressed')
+           console.log(widgetOpen);
+           console.log(trackInd)
+            // alert('pressed')
+        // }
+       
     }
 
     // const handleOpenWidget = () => {
@@ -62,6 +62,8 @@ export default function PlaylistPage({
     // useEffect(() => {
     //     setWidgetOpen(!widgetOpen)
     // }, [trackInd])
+
+    console.log(`again in playlist file ${widgetOpen}`)
 
     const trackArr: audioTrack[] = [] //might make more sense to pass individual track to widget & rerender on skip...
     storyPosts.map((post) => {
@@ -87,12 +89,15 @@ export default function PlaylistPage({
                             <div className="flex flex-col gap-y-2">
                                 <h2 className="group-hover:underline text-xl font-semibold">{post.title || "null"}</h2>
                             <p className='text-m'>{`By ${post.contributors}`}</p>
-                            <div className='italic'>
-                                {Array.isArray(post.description) && <PortableText value={post.description} />}
-                            </div>               
+                                <div className='italic'>
+                                    {Array.isArray(post.description) && <PortableText value={post.description} />}
+                                </div>               
                             </div>
                         </Link>
-                        <button onClick={() => handleStorySelect(i)} className="relative z-50 w-[150px] flex-shrink-0 h-[150px] aspect-circle rounded-full overflow-hidden cursor-pointer">
+                        <button onClick={(e) => {
+                            // e.preventDefault;
+                            // e.stopPropagation;
+                            handleStorySelect(i)}} className="relative w-[150px] h-[150px] flex-shrink-0 rounded-full overflow-hidden cursor-pointer appearance-none border-none bg-gray-200">
                             <img
                                 className="rounded-full transition-filter duration-300 group-hover:brightness-50"
                                 src={urlFor(post.images[0])
@@ -118,8 +123,6 @@ export default function PlaylistPage({
                 </li>
                 ))}
             </ul>
-            {/* <footer className="border-t fixed bottom-0 w-full py-2 px-5 border-slate-300 bg-[#02021C]"> */}
-            <AudioWidget ref={widgetRef} trackArr={trackArr} font={fonts[1]} skip={true} open={widgetOpen} startTrackInd={trackInd || 0} playing={widgetOpen}/>
-            {/* </footer> */}
+            <AudioWidget trackArr={trackArr} font={fonts[1]} skip={true} open={widgetOpen} startTrackInd={trackInd || 0} playing={widgetOpen}/>
         </main>);
 }
