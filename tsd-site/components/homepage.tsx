@@ -105,6 +105,7 @@ export function HomePage({posts, fonts}: HPInput) {
     }, [posData]);
 
     return (
+
         <div className = "relative flex flex-col items-center min-h-screen bg-black">
             <div className='w-full flex items-center justify-center border-b border-b-1 border-b-slate-300 mb-4'>
                 <h1 className={`${fonts[0]} pl-4 antialiased text-slate-300 text-[50px] my-4 text-start cursor-pointer`}>The Tappan Square Dispatch</h1>
@@ -202,7 +203,17 @@ export function HomePage({posts, fonts}: HPInput) {
 
                 ))} */}
             </ul>
-            <div>
+            {/* <div className="z-10 bg-white"> */}
+                {/* <h3>
+                    <code children="<CardinalCurve />" />
+                </h3>
+                {ccData?
+                    <svg height='auto' width='auto' xmlns="http://www.w3.org/2000/svg">
+                        <CardinalCurve data={ccData[0]} tension={0} />
+                    </svg>
+                : <></>
+                } */}
+                
                 {/* <h3>
                     <code children="<CardinalCurve />" />
                 </h3>
@@ -223,7 +234,7 @@ export function HomePage({posts, fonts}: HPInput) {
                     value={cardinalTension}
                     setValue={setCardinalTension}
                 /> */}
-            </div>
+            {/* </div> */}
         </div>
     )
 }
