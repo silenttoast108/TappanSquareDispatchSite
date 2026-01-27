@@ -65,7 +65,7 @@ export default function PlaylistPage({
             <ul className="gap-y-4 px-20 mx-auto w-full mb-50">
                 {storyPosts.map((post: storyPost, i) => (
                 <li className="my-2" key={i}>
-                    <div className={`${fonts[1]} z-1 group antialiased flex flex-row p-2 my-2 justify-between items-center`}>
+                    <div className={`${fonts[1]} z-1 group text-slate-300 antialiased flex flex-row p-2 my-2 justify-between items-center`}>
                         <Link href={`/${slug}/${post.storySlug}`}>
                             <div className="flex flex-col gap-y-2">
                                 <h2 className="group-hover:underline text-xl font-semibold">{post.title || "null"}</h2>

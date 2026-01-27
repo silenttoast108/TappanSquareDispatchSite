@@ -95,7 +95,7 @@ export default function TranscriptPage({title, contributors, date, description, 
                     alt={`Image for ${title}`}
                 />
             </div>
-            <div className={`${f2.className} antialiased mb-45 px-4 border-t border-t-1 border-t-slate-300 pt-4 overflow-hidden`}>
+            <div className={`${f2.className} antialiased mb-45 px-4 border-t border-t-1 border-t-slate-300 pt-4 overflow-hidden text-slate-300`}>
                 {Array.isArray(script) && <PortableText value={script} />}
             </div>
                 <AudioWidget 

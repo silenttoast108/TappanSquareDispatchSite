@@ -7,10 +7,6 @@ import TranscriptPage, {TPInput} from "@/components/transcriptPage";
 import PlaylistPage, {storyPost} from "@/components/playlistPage";
 import { title } from "process";
 
-const epilogue = Epilogue({
-    subsets: ["latin"]
-})
-
 //used for obtaining all stories in a collection
 const STORIES_QUERY = `*[
  _type == "story" && AssociatedCollection->slug.current == $slug
@@ -30,6 +26,9 @@ const f1 = Oleo_Script({
   subsets: ["latin"]
 });
 
+const epilogue = Epilogue({
+    subsets: ["latin"]
+});
 
 export default async function storiesPage({
   params,

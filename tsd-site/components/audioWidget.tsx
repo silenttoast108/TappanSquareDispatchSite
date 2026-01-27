@@ -175,7 +175,7 @@ export function AudioWidget({open, startTrackInd, trackArr, font, skip, playing,
     return (
         <div 
             className = {`${isOpen? 'visible' : 'invisible'}
-                border-t fixed bottom-0 w-full py-2 px-5 border-slate-300 bg-[#02021C]`}
+                border-t fixed bottom-0 w-full py-2 px-5 text-slate-300 border-slate-300 bg-[#02021C]`}
             >
                 
             <div className="flex flex-col gap-y-4 py-4 w-full items-center justify-center mx-auto">
