@@ -3,8 +3,9 @@
 import { urlFor } from "@/app/sanity/sanityImageUrl";
 import { Link } from "lucide-react";
 import { SanityImageAssetDocument, PortableTextBlock, SanityDocument, PortableText } from "next-sanity";
-import { CardinalCurve } from "react-svg-curve";
-import * as motion from "motion/react"
+// import { CardinalCurve } from "react-svg-curve";
+// import * as motion from "motion/react"
+import * as d3 from "d3"
 import { use, useLayoutEffect, useRef, useState } from "react";
 
 export interface HPInput {
@@ -26,28 +27,7 @@ const handleRoute = (post: collectionPost) => {//temp solution
     window.open(`/${post.slug}`);
 }
 
-// function Range({ min = 0, max = 1, step = 0.01, value, setValue, label }) {
-//   return (
-//     <div
-//       style={{
-//         display: "flex",
-//         justifyContent: "center",
-//         alignItems: "center"
-//       }}
-//     >
-//       <label>{label}: </label>
-//       <div style={{ width: 50 }}>{value}</div>
-//       <input
-//         type="range"
-//         step={step}
-//         min={min}
-//         max={max}
-//         value={value}
-//         onChange={e => setValue(+e.target.value)}
-//       />
-//     </div>
-//   );
-// }
+
 
 export function HomePage({posts, fonts}: HPInput) {
     // console.log(posts)\
@@ -57,6 +37,16 @@ export function HomePage({posts, fonts}: HPInput) {
 
     const [posData, setPosData] = useState<[number, number][]>();
     const [ccData, setCcData] = useState<[number, number][][]>();
+
+    const generatePath = (ind: number, tension: number) => {
+        if (!ccData) return
+        const lineGen = d3.line()
+            .x(d => d[0])
+            .y(d => d[1])
+            .curve(d3.curveCardinal.tension(tension));
+
+        return lineGen(ccData[ind]);
+    }
 
     useLayoutEffect(() => {
         const updatePositions = () => {
@@ -88,7 +78,7 @@ export function HomePage({posts, fonts}: HPInput) {
             return [intermediateX, intermediateY];
         };
 
-        const renderCardinalCurves = () => {
+        const genPosData = () => {
             if (posData) {
                 setCcData([
                     [posData[0], calcIntermediateNode(posData[0], posData[1]), posData[1]],
@@ -98,15 +88,50 @@ export function HomePage({posts, fonts}: HPInput) {
         }
 
         updatePositions();
-        renderCardinalCurves();
+        genPosData();
         
         window.addEventListener('resize', updatePositions);
         return () => window.removeEventListener('resize', updatePositions);
     }, [posData]);
 
-    return (
+    const path1 = generatePath(0, 0);
+    const path2 = generatePath(1, 0)
 
+    return (
         <div className = "relative flex flex-col items-center min-h-screen bg-black">
+            {
+                (path1 && path2)?
+                <svg className="absolute inset-0 w-full h-full pointer-events-none z-10">
+                    {/* The Glow/Blur Layer */}
+                    <path
+                        d={path1}
+                        stroke="rgba(168, 85, 247, 0.2)" 
+                        strokeWidth="12"
+                        fill="none"
+                        className="blur-xl"
+                    />
+                    
+                    {/* The Main Visible Line */}
+                    <path
+                        d={path1}
+                        stroke="url(#gradient)"
+                        strokeWidth="2"
+                        fill="none"
+                        strokeLinecap="round"
+                        strokeDasharray="10 5" // Optional: Creates a dashed "mapped" look
+                    />
+
+                    {/* Gradient Definition */}
+                    <defs>
+                        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stopColor="#818cf8" />
+                        <stop offset="100%" stopColor="#c084fc" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+                : <></>
+            }
+            
             <div className='w-full flex items-center justify-center border-b border-b-1 border-b-slate-300 mb-4'>
                 <h1 className={`${fonts[0]} pl-4 antialiased text-slate-300 text-[50px] my-4 text-start cursor-pointer`}>The Tappan Square Dispatch</h1>
             </div>
@@ -203,38 +228,6 @@ export function HomePage({posts, fonts}: HPInput) {
 
                 ))} */}
             </ul>
-            {/* <div className="z-10 bg-white"> */}
-                {/* <h3>
-                    <code children="<CardinalCurve />" />
-                </h3>
-                {ccData?
-                    <svg height='auto' width='auto' xmlns="http://www.w3.org/2000/svg">
-                        <CardinalCurve data={ccData[0]} tension={0} />
-                    </svg>
-                : <></>
-                } */}
-                
-                {/* <h3>
-                    <code children="<CardinalCurve />" />
-                </h3>
-                <svg width="200" height="100" xmlns="http://www.w3.org/2000/svg"> */}
-                {/* {ccData? 
-                    <><CardinalCurve data={ccData[0]} tension={20} /><Range
-                        label="tension"
-                        max={1}
-                        value={0}
-                        setValue={0} /></>
-                    
-                : <></>} */}
-                    
-                {/* </svg>
-                <Range
-                    label="tension"
-                    max={1}
-                    value={cardinalTension}
-                    setValue={setCardinalTension}
-                /> */}
-            {/* </div> */}
         </div>
     )
 }
