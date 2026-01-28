@@ -27,13 +27,13 @@ const handleRoute = (post: collectionPost) => {//temp solution
     window.open(`/${post.slug}`);
 }
 
-
-
 export function HomePage({posts, fonts}: HPInput) {
-    // console.log(posts)\
+    // console.log(posts)
     const l1ref = useRef<HTMLDivElement | null>(null);
     const l2ref = useRef<HTMLDivElement | null>(null);
     const l3ref = useRef<HTMLDivElement | null>(null);
+
+    const refArr = [l1ref, l2ref, l3ref];
 
     const [posData, setPosData] = useState<[number, number][]>();
     const [ccData, setCcData] = useState<[number, number][][]>();
@@ -50,40 +50,139 @@ export function HomePage({posts, fonts}: HPInput) {
 
     useLayoutEffect(() => {
         const updatePositions = () => {
-            if (!l1ref.current || !l2ref.current || !l3ref.current) return;
-
-            const newCoords: [number, number][] = [
-                [l1ref.current.getBoundingClientRect().x, l1ref.current.getBoundingClientRect().y],
-                [l2ref.current.getBoundingClientRect().x, l2ref.current.getBoundingClientRect().y],
-                [l3ref.current.getBoundingClientRect().x, l3ref.current.getBoundingClientRect().y]
-            ];
+            const newCoords: [number, number][] = []
+            for (const ref of refArr) {
+                let b = ref.current?.getBoundingClientRect()
+                if (b) {
+                    newCoords.push (
+                        [
+                            b.x + window.scrollX + (b.width)/2,
+                            b.y + window.scrollY + (b.height)/3
+                        ]
+                    )
+                }
+            }
 
             if (JSON.stringify(newCoords) !== JSON.stringify(posData)) setPosData(newCoords)
         };
 
-        const calcIntermediateNode = (cord1: [number, number], cord2: [number, number], displacement: number = 40): [number, number] => {
-            const [x1, y1] = cord1;
-            const [x2, y2] = cord2;
+        // const calcIntermediateNode = (cord1: [number, number], cord2: [number, number], displacement: number = 60): [number, number] => {
+        //     const [x1, y1] = cord1;
+        //     const [x2, y2] = cord2;
 
-            const midX = (x1 + x2) / 2;
-            const midY = (y1 + y2) / 2;
+        //     const midX = (x1 + x2) / 2;
+        //     const midY = (y1 + y2) / 2;
 
-            const dx = x2 - x1;
-            const dy = y2 - y1;
-            const angle = Math.atan2(dy, dx);
+        //     const dx = x2 - x1;
+        //     const dy = y2 - y1;
+        //     const angle = Math.atan2(dy, dx);
 
-            const intermediateX = midX + displacement * Math.cos(angle + Math.PI / 2);
-            const intermediateY = midY + displacement * Math.sin(angle + Math.PI / 2);
+        //     const intermediateX = midX + displacement * Math.cos(angle + Math.PI / 2); //used to be sum of mid and displacement
+        //     const intermediateY = midY + displacement * Math.sin(angle + Math.PI / 2);
 
-            return [intermediateX, intermediateY];
-        };
+        //     return [intermediateX, intermediateY];
+        // };
+
+        const calcIntermediateNodes = (cord1: [number, number], cord2: [number, number], points: number = 2): [number, number][] => {
+            
+            // const [x1, y1] = cord1;
+            // const [x2, y2] = cord2;
+
+            const xArr = [cord1[0], cord2[0]].sort((a: number, b: number) => {
+                return a - b
+            });
+            const yArr = [cord1[1], cord2[1]].sort((a: number, b: number) => {
+                return a - b
+            });
+            // trueY: number = , 
+            // const lowX = Math.min(x1, x2); //this logic may need to be dif for curve going the other way
+            // const lowY = Math.min(y1, y2); // might be cleaner if it is sorted
+            // const highY = Math.max(y1, y2);
+            // const highX = Math.max(x1, x2);
+
+            // console.log(`cord1: ${cord1}`);
+            // console.log(`cord2: ${cord2}`);
+            // console.log(`lowx: ${xArr[0]}`);
+            // console.log(`lowy: ${yArr[0]}`);
+            //const midX = (x1 + x2)/3;
+            //const midY = (y1 + y1)/3;
+
+            // const difX = Math.abs(x1-x2);
+            // const difY = Math.abs(y1-y2);
+            const difX = xArr[1] - xArr[0];
+            const difY = yArr[1] - yArr[0];
+
+            const lowBoundX = xArr[0] + (difX/4);
+            const lowBoundY = yArr[0] + (difY/4);
+            const upBoundY = yArr[1] - (difY/4);
+            const upBoundX = xArr[1] - (difX/4);
+
+            //console.log(lowBoundX, lowBoundY, upBoundX, upBoundY);
+
+            const newdifX = upBoundX - lowBoundX;
+            const newdifY = upBoundY - lowBoundY;
+            //const m = difY/difX;
+            //const xMinThresh = difX/points;
+            const pointArr: [number, number][] = []
+
+            // for (let i = 1; i < (points + 1); i++) {
+            //   const xSegment = lowX + (i * difX) / points; //split xdif into even segments based on # of points
+            //   console.log(xSegment);
+            //   const min = Math.max(lowX, xSegment - xMinThresh);
+            //   const randX = Math.floor(Math.random() * (xSegment - min) + min); //gen random x val within appropriate range
+            //   //function is -m(randX - xSegment) + 0  
+            //   console.log(`randX: ${randX}`);
+            //   //pointArr[i-1] = [randX, lowY + (0-m)*(randX - (xSegment))]; //push random point genrated along inverse slope of m that corresponds to x segment
+            //     pointArr.push([randX, lowY]); // + (0-m)*(randX - (xSegment))
+            // }
+
+            // for (let i = 1; i < (points + 1); i++) {
+            //     const xSegment = lowX + (i * difX) / points;
+            //     const ySegment = lowY + (i * difY) / points;
+            //     const xMin = Math.max(lowX, lowX + ((i-1) * difX) / points);
+            //     const yMin = Math.max(lowY, lowY + ((i-1) * difY) / points);
+            //     const randX = Math.floor(Math.random() * (xSegment - xMin) + xMin);
+            //     const randY = Math.floor(Math.random() * (ySegment - yMin) + yMin);
+            //     pointArr[i-1] = [randX, randY];
+            // }
+
+            for (let i = 1; i < (3); i++) {
+                const xSegment = lowBoundX + (i * newdifX) / 2;
+                const ySegment = lowBoundY + (i * newdifY) / 2;
+                const xMin = Math.max(lowBoundX, lowBoundX + ((i-1) * newdifX) / 2);
+                const yMin = Math.max(lowBoundY, lowBoundY + ((i-1) * newdifY) / 2);
+                const randX = Math.floor(Math.random() * (xSegment - xMin) + xMin);
+                const randY = Math.floor(Math.random() * (ySegment - yMin) + yMin);
+                pointArr[i-1] = [randX, randY];
+            }
+
+            return pointArr;
+        }
 
         const genPosData = () => {
             if (posData) {
+                const pointArr1 = [posData[0]];
+                const intermediateNodes1 = calcIntermediateNodes(posData[0], posData[1]);
+
+                intermediateNodes1.forEach((node) => {
+                    pointArr1.push(node);
+                });
+                pointArr1.push(posData[1]);
+                
+                const pointArr2 = [posData[1]];
+                const intermediateNodes2 = calcIntermediateNodes(posData[1], posData[2], 2);
+
+                intermediateNodes2.forEach((node) => {
+                    pointArr2.push(node);
+                });
+                pointArr2.push(posData[2]);
+
                 setCcData([
-                    [posData[0], calcIntermediateNode(posData[0], posData[1]), posData[1]],
-                    [posData[1], calcIntermediateNode(posData[0], posData[1]), posData[2]]
-                ])
+                    //[posData[0], calcIntermediateNode(posData[0], posData[1]), posData[1]],
+                    //[posData[1], calcIntermediateNode(posData[0], posData[1]), posData[2]]
+                    pointArr1,
+                    pointArr2
+                ]);
             }
         }
 
@@ -121,6 +220,23 @@ export function HomePage({posts, fonts}: HPInput) {
                         strokeDasharray="10 5" // Optional: Creates a dashed "mapped" look
                     />
 
+                    <path
+                        d={path2}
+                        stroke="rgba(168, 85, 247, 0.2)" 
+                        strokeWidth="12"
+                        fill="none"
+                        className="blur-xl"
+                    />
+                    
+                    {/* The Main Visible Line */}
+                    <path
+                        d={path2}
+                        stroke="url(#gradient)"
+                        strokeWidth="2"
+                        fill="none"
+                        strokeLinecap="round"
+                        strokeDasharray="10 5" // Optional: Creates a dashed "mapped" look
+                    />
                     {/* Gradient Definition */}
                     <defs>
                         <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -143,7 +259,7 @@ export function HomePage({posts, fonts}: HPInput) {
                         politics. Oberlin is the oldest coeducational college in the U.S., located in a historically liberal small town. 
                         The name of this podcast comes from the beautiful little square park where the town and college intersect. 
                     </span>
-                    <div className='relative flex items-center justify-center flex-initial h-[150px] w-[150px] md:h-[300px] md:w-[300px] flex-shrink-0 rounded-full border border-1 border-slate-300'>
+                    <div className='relative flex items-center justify-center flex-initial h-[150px] w-[150px] md:h-[300px] md:w-[300px] flex-shrink-0 rounded-full border border-1 border-slate-300 m-2'>
                         <img
                             className="z-1 rounded-full transition-filter duration-300 group-hover:brightness-50"
                             src={urlFor(posts[0].image)
@@ -161,7 +277,7 @@ export function HomePage({posts, fonts}: HPInput) {
                     </div>
                 </li>
                 <li className="flex flex-row justify-between items-center py-[3%] px-[15%] gap-x-[15%]" key={posts[1].id}>
-                    <div className='relative flex items-center justify-center flex-initial h-[150px] w-[150px] md:h-[300px] md:w-[300px] flex-shrink-0 rounded-full border border-1 border-slate-300'>
+                    <div className='relative flex items-center justify-center flex-initial h-[150px] w-[150px] md:h-[300px] md:w-[300px] flex-shrink-0 rounded-full border border-1 border-slate-300 m-2'>
                         <img
                             className="z-1 rounded-full transition-filter duration-300 group-hover:brightness-50"
                             src={urlFor(posts[1].image)
