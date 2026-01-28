@@ -83,10 +83,8 @@ export function HomePage({posts, fonts}: HPInput) {
         //     return [intermediateX, intermediateY];
         // };
 
-        const calcIntermediateNodes = (cord1: [number, number], cord2: [number, number], points: number = 2): [number, number][] => {
-            
-            // const [x1, y1] = cord1;
-            // const [x2, y2] = cord2;
+        const calcIntermediateNodes = (cord1: [number, number], cord2: [number, number], leftToRight: boolean = false, bend: number = 1): [number, number][] => {
+            const bendFactor = 1 + (bend % 1);
 
             const xArr = [cord1[0], cord2[0]].sort((a: number, b: number) => {
                 return a - b
@@ -94,21 +92,7 @@ export function HomePage({posts, fonts}: HPInput) {
             const yArr = [cord1[1], cord2[1]].sort((a: number, b: number) => {
                 return a - b
             });
-            // trueY: number = , 
-            // const lowX = Math.min(x1, x2); //this logic may need to be dif for curve going the other way
-            // const lowY = Math.min(y1, y2); // might be cleaner if it is sorted
-            // const highY = Math.max(y1, y2);
-            // const highX = Math.max(x1, x2);
-
-            // console.log(`cord1: ${cord1}`);
-            // console.log(`cord2: ${cord2}`);
-            // console.log(`lowx: ${xArr[0]}`);
-            // console.log(`lowy: ${yArr[0]}`);
-            //const midX = (x1 + x2)/3;
-            //const midY = (y1 + y1)/3;
-
-            // const difX = Math.abs(x1-x2);
-            // const difY = Math.abs(y1-y2);
+            
             const difX = xArr[1] - xArr[0];
             const difY = yArr[1] - yArr[0];
 
@@ -117,44 +101,70 @@ export function HomePage({posts, fonts}: HPInput) {
             const upBoundY = yArr[1] - (difY/4);
             const upBoundX = xArr[1] - (difX/4);
 
-            //console.log(lowBoundX, lowBoundY, upBoundX, upBoundY);
-
             const newdifX = upBoundX - lowBoundX;
             const newdifY = upBoundY - lowBoundY;
-            //const m = difY/difX;
-            //const xMinThresh = difX/points;
+            
             const pointArr: [number, number][] = []
 
-            // for (let i = 1; i < (points + 1); i++) {
-            //   const xSegment = lowX + (i * difX) / points; //split xdif into even segments based on # of points
-            //   console.log(xSegment);
-            //   const min = Math.max(lowX, xSegment - xMinThresh);
-            //   const randX = Math.floor(Math.random() * (xSegment - min) + min); //gen random x val within appropriate range
-            //   //function is -m(randX - xSegment) + 0  
-            //   console.log(`randX: ${randX}`);
-            //   //pointArr[i-1] = [randX, lowY + (0-m)*(randX - (xSegment))]; //push random point genrated along inverse slope of m that corresponds to x segment
-            //     pointArr.push([randX, lowY]); // + (0-m)*(randX - (xSegment))
-            // }
-
-            // for (let i = 1; i < (points + 1); i++) {
-            //     const xSegment = lowX + (i * difX) / points;
-            //     const ySegment = lowY + (i * difY) / points;
-            //     const xMin = Math.max(lowX, lowX + ((i-1) * difX) / points);
-            //     const yMin = Math.max(lowY, lowY + ((i-1) * difY) / points);
-            //     const randX = Math.floor(Math.random() * (xSegment - xMin) + xMin);
-            //     const randY = Math.floor(Math.random() * (ySegment - yMin) + yMin);
+            // for (let i = 1; i < (3); i++) {
+            //     var xMax;
+            //     var xMin;
+            //     var yMax;
+            //     var yMin;
+            //     var randX;
+            //     var randY;
+                    
+            //     if (leftToRight) {
+            //        xMin = upBoundX - (i * newdifX) / 2;
+            //        xMax = upBoundX - ((i-1) * newdifX) / 2;
+            //     } else {
+            //         xMax = lowBoundX + (i * newdifX) / 2;
+            //         xMin = lowBoundX + ((i-1) * newdifX) / 2;
+            //     }
+                
+            //     const yMax = lowBoundY + (i * newdifY) / (2);
+            //     const yMin = lowBoundY + ((i-1) * newdifY) / (2);
+            //     const randX = Math.floor(Math.random() * (xMax - xMin) + xMin);
+            //     const randY = Math.floor(Math.random() * (yMax - yMin) + yMin);
             //     pointArr[i-1] = [randX, randY];
             // }
-
-            for (let i = 1; i < (3); i++) {
-                const xSegment = lowBoundX + (i * newdifX) / 2;
-                const ySegment = lowBoundY + (i * newdifY) / 2;
-                const xMin = Math.max(lowBoundX, lowBoundX + ((i-1) * newdifX) / 2);
-                const yMin = Math.max(lowBoundY, lowBoundY + ((i-1) * newdifY) / 2);
-                const randX = Math.floor(Math.random() * (xSegment - xMin) + xMin);
-                const randY = Math.floor(Math.random() * (ySegment - yMin) + yMin);
-                pointArr[i-1] = [randX, randY];
+                        
+            var xMax;
+            var xMin;
+            var yMax;
+            var yMin;
+            var randX;
+            var randY;
+                
+            if (leftToRight) {
+                xMin = upBoundX - (newdifX / 2) * (bendFactor);
+                xMax = upBoundX;
+            } else {
+                xMax = lowBoundX + newdifX / 2 * (bendFactor);
+                xMin = lowBoundX;
             }
+            
+            yMax = lowBoundY + newdifY / 2;
+            yMin = lowBoundY;
+            randX = Math.floor(Math.random() * (xMax - xMin) + xMin);
+            randY = Math.floor(Math.random() * (yMax - yMin) + yMin);
+            pointArr.push([randX, randY]);
+
+            if (leftToRight) {
+                xMin = upBoundX - newdifX;
+                xMax = upBoundX - newdifX / 2 * (1 - bendFactor);
+            } else {
+                xMax = lowBoundX + newdifX;
+                xMin = lowBoundX +  newdifX / 2 * (1 - bendFactor);
+            }
+            
+            yMax = lowBoundY + newdifY;
+            yMin = lowBoundY + newdifY / (2);
+            randX = Math.floor(Math.random() * (xMax - xMin) + xMin);
+            randY = Math.floor(Math.random() * (yMax - yMin) + yMin);
+            pointArr.push([randX, randY]);
+            //pointArr[i-1] = [randX, randY];
+        
 
             return pointArr;
         }
@@ -162,7 +172,7 @@ export function HomePage({posts, fonts}: HPInput) {
         const genPosData = () => {
             if (posData) {
                 const pointArr1 = [posData[0]];
-                const intermediateNodes1 = calcIntermediateNodes(posData[0], posData[1]);
+                const intermediateNodes1 = calcIntermediateNodes(posData[0], posData[1], false, 0.66); //seems to be an appropriate factor. Might need to vary dep on screen size
 
                 intermediateNodes1.forEach((node) => {
                     pointArr1.push(node);
@@ -170,7 +180,7 @@ export function HomePage({posts, fonts}: HPInput) {
                 pointArr1.push(posData[1]);
                 
                 const pointArr2 = [posData[1]];
-                const intermediateNodes2 = calcIntermediateNodes(posData[1], posData[2], 2);
+                const intermediateNodes2 = calcIntermediateNodes(posData[1], posData[2], true, 0.66); // remember to add spacing between orbs and text blocks
 
                 intermediateNodes2.forEach((node) => {
                     pointArr2.push(node);
@@ -200,42 +210,42 @@ export function HomePage({posts, fonts}: HPInput) {
         <div className = "relative flex flex-col items-center min-h-screen bg-black">
             {
                 (path1 && path2)?
-                <svg className="absolute inset-0 w-full h-full pointer-events-none z-10">
+                <svg className="absolute inset-0 w-full h-full pointer-events-none z-1">
                     {/* The Glow/Blur Layer */}
-                    <path
+                    {/* <path
                         d={path1}
                         stroke="rgba(168, 85, 247, 0.2)" 
                         strokeWidth="12"
                         fill="none"
                         className="blur-xl"
-                    />
+                    /> */}
                     
                     {/* The Main Visible Line */}
                     <path
                         d={path1}
                         stroke="url(#gradient)"
-                        strokeWidth="2"
+                        strokeWidth="4"
                         fill="none"
                         strokeLinecap="round"
-                        strokeDasharray="10 5" // Optional: Creates a dashed "mapped" look
+                        //strokeDasharray="10 5" // Optional: Creates a dashed "mapped" look
                     />
 
-                    <path
+                    {/* <path
                         d={path2}
                         stroke="rgba(168, 85, 247, 0.2)" 
                         strokeWidth="12"
                         fill="none"
                         className="blur-xl"
-                    />
+                    /> */}
                     
                     {/* The Main Visible Line */}
                     <path
                         d={path2}
                         stroke="url(#gradient)"
-                        strokeWidth="2"
+                        strokeWidth="4"
                         fill="none"
                         strokeLinecap="round"
-                        strokeDasharray="10 5" // Optional: Creates a dashed "mapped" look
+                        //strokeDasharray="10 5" // Optional: Creates a dashed "mapped" look
                     />
                     {/* Gradient Definition */}
                     <defs>
@@ -253,7 +263,7 @@ export function HomePage({posts, fonts}: HPInput) {
             </div>
             <ul className="flex flex-col gap-y-4 mx-auto max-w">
                 <li className="flex flex-row justify-between items-center py-[3%] px-[15%] gap-x-[15%]" key={posts[0].id}>
-                    <span className={`text-center ${fonts[1]} antialiased text-slate-300 overflow-hidden`}>
+                    <span className={`text-center ${fonts[1]} antialiased text-slate-300 overflow-hidden z-2`}>
                         Oberlin College is a small undergraduate liberal arts college in northeast Ohio that is known for 
                         its uniquely strong music conservatory, arts and humanities programs, STEM programs, and progressive 
                         politics. Oberlin is the oldest coeducational college in the U.S., located in a historically liberal small town. 
@@ -293,14 +303,14 @@ export function HomePage({posts, fonts}: HPInput) {
                                 </div>
                             </div>
                     </div>
-                    <span className={`text-center ${fonts[1]} antialiased text-slate-300 overflow-hidden`}>
+                    <span className={`text-center ${fonts[1]} antialiased text-slate-300 overflow-hidden z-2`}>
                         Oberlin's journalism students will use this podcast to feature audio content they have produced. In the past, there have been other Oberlin student news podcasts, 
                         such as The Weekly from our campus newspaper, The Oberlin Review, The Monday Morning Report from Oberlin's radio station, WOBC-FM (91.5), and Obercast, which was produced
                          during a 2020 Winter Term class on podcasting. In Fall 2022, third-year student Hazel Feldstein created The Tappan Square Dispatch (TSD) to cover both campus and local town news.
                     </span>
                 </li>
                 <li className="flex flex-row justify-between items-center py-[3%] px-[15%] gap-x-[15%]" key={posts[2].id}>
-                    <span className={`${fonts[1]} text-center antialiased text-slate-300 overflow-hidden`}>
+                    <span className={`${fonts[1]} text-center antialiased text-slate-300 overflow-hidden z-2`}>
                         Oberlin College is a small undergraduate liberal arts college in northeast Ohio that is known for 
                         its uniquely strong music conservatory, arts and humanities programs, STEM programs, and progressive 
                         politics. Oberlin is the oldest coeducational college in the U.S., located in a historically liberal small town. 
