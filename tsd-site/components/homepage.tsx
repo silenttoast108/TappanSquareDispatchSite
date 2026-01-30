@@ -55,6 +55,69 @@ export function HomePage({posts, fonts}: HPInput) {
         return lineGen(ccData[ind]);
     }
 
+
+    const calcIntermediateNodes = (cord1: [number, number], cord2: [number, number], leftToRight: boolean = false, bend: number = 1): [number, number][] => {
+        const bendFactor = 1 + (bend % 1);
+
+        const xArr = [cord1[0], cord2[0]].sort((a: number, b: number) => {
+            return a - b
+        });
+        const yArr = [cord1[1], cord2[1]].sort((a: number, b: number) => {
+            return a - b
+        });
+        
+        const difX = xArr[1] - xArr[0];
+        const difY = yArr[1] - yArr[0];
+
+        const lowBoundX = xArr[0] + (difX/4);
+        const lowBoundY = yArr[0] + (difY/4);
+        const upBoundY = yArr[1] - (difY/4);
+        const upBoundX = xArr[1] - (difX/4);
+
+        const newdifX = upBoundX - lowBoundX;
+        const newdifY = upBoundY - lowBoundY;
+        
+        const pointArr: [number, number][] = []
+                    
+        var xMax;
+        var xMin;
+        var yMax;
+        var yMin;
+        var randX;
+        var randY;
+            
+        if (leftToRight) {
+            xMin = upBoundX - (newdifX / 2) * (bendFactor);
+            xMax = upBoundX;
+        } else {
+            xMax = lowBoundX + newdifX / 2 * (bendFactor);
+            xMin = lowBoundX;
+        }
+        
+        yMax = lowBoundY + newdifY / 2;
+        yMin = lowBoundY;
+        randX = Math.floor(Math.random() * (xMax - xMin) + xMin);
+        randY = Math.floor(Math.random() * (yMax - yMin) + yMin);
+        pointArr.push([randX, randY]);
+
+        if (leftToRight) {
+            xMin = upBoundX - newdifX;
+            xMax = upBoundX - newdifX / 2 * (1 - bendFactor);
+        } else {
+            xMax = lowBoundX + newdifX;
+            xMin = lowBoundX +  newdifX / 2 * (1 - bendFactor);
+        }
+        
+        yMax = lowBoundY + newdifY;
+        yMin = lowBoundY + newdifY / (2);
+        randX = Math.floor(Math.random() * (xMax - xMin) + xMin);
+        randY = Math.floor(Math.random() * (yMax - yMin) + yMin);
+        pointArr.push([randX, randY]);
+        //pointArr[i-1] = [randX, randY];
+    
+        return pointArr;
+    }
+
     useLayoutEffect(() => {
         const updatePositions = () => {
             const newCoords: [number, number][] = []
@@ -73,110 +136,20 @@ export function HomePage({posts, fonts}: HPInput) {
             if (JSON.stringify(newCoords) !== JSON.stringify(posData)) setPosData(newCoords)
         };
 
-        // const calcIntermediateNode = (cord1: [number, number], cord2: [number, number], displacement: number = 60): [number, number] => {
-        //     const [x1, y1] = cord1;
-        //     const [x2, y2] = cord2;
+        const genPosData = () => {//should be better now...
+            const toBeCcData: [number, number][][] = []
 
-        //     const midX = (x1 + x2) / 2;
-        //     const midY = (y1 + y2) / 2;
-
-        //     const dx = x2 - x1;
-        //     const dy = y2 - y1;
-        //     const angle = Math.atan2(dy, dx);
-
-        //     const intermediateX = midX + displacement * Math.cos(angle + Math.PI / 2); //used to be sum of mid and displacement
-        //     const intermediateY = midY + displacement * Math.sin(angle + Math.PI / 2);
-
-        //     return [intermediateX, intermediateY];
-        // };
-
-        const calcIntermediateNodes = (cord1: [number, number], cord2: [number, number], leftToRight: boolean = false, bend: number = 1): [number, number][] => {
-            const bendFactor = 1 + (bend % 1);
-
-            const xArr = [cord1[0], cord2[0]].sort((a: number, b: number) => {
-                return a - b
-            });
-            const yArr = [cord1[1], cord2[1]].sort((a: number, b: number) => {
-                return a - b
-            });
-            
-            const difX = xArr[1] - xArr[0];
-            const difY = yArr[1] - yArr[0];
-
-            const lowBoundX = xArr[0] + (difX/4);
-            const lowBoundY = yArr[0] + (difY/4);
-            const upBoundY = yArr[1] - (difY/4);
-            const upBoundX = xArr[1] - (difX/4);
-
-            const newdifX = upBoundX - lowBoundX;
-            const newdifY = upBoundY - lowBoundY;
-            
-            const pointArr: [number, number][] = []
-
-            // for (let i = 1; i < (3); i++) {
-            //     var xMax;
-            //     var xMin;
-            //     var yMax;
-            //     var yMin;
-            //     var randX;
-            //     var randY;
-                    
-            //     if (leftToRight) {
-            //        xMin = upBoundX - (i * newdifX) / 2;
-            //        xMax = upBoundX - ((i-1) * newdifX) / 2;
-            //     } else {
-            //         xMax = lowBoundX + (i * newdifX) / 2;
-            //         xMin = lowBoundX + ((i-1) * newdifX) / 2;
-            //     }
-                
-            //     const yMax = lowBoundY + (i * newdifY) / (2);
-            //     const yMin = lowBoundY + ((i-1) * newdifY) / (2);
-            //     const randX = Math.floor(Math.random() * (xMax - xMin) + xMin);
-            //     const randY = Math.floor(Math.random() * (yMax - yMin) + yMin);
-            //     pointArr[i-1] = [randX, randY];
-            // }
-                        
-            var xMax;
-            var xMin;
-            var yMax;
-            var yMin;
-            var randX;
-            var randY;
-                
-            if (leftToRight) {
-                xMin = upBoundX - (newdifX / 2) * (bendFactor);
-                xMax = upBoundX;
-            } else {
-                xMax = lowBoundX + newdifX / 2 * (bendFactor);
-                xMin = lowBoundX;
-            }
-            
-            yMax = lowBoundY + newdifY / 2;
-            yMin = lowBoundY;
-            randX = Math.floor(Math.random() * (xMax - xMin) + xMin);
-            randY = Math.floor(Math.random() * (yMax - yMin) + yMin);
-            pointArr.push([randX, randY]);
-
-            if (leftToRight) {
-                xMin = upBoundX - newdifX;
-                xMax = upBoundX - newdifX / 2 * (1 - bendFactor);
-            } else {
-                xMax = lowBoundX + newdifX;
-                xMin = lowBoundX +  newdifX / 2 * (1 - bendFactor);
-            }
-            
-            yMax = lowBoundY + newdifY;
-            yMin = lowBoundY + newdifY / (2);
-            randX = Math.floor(Math.random() * (xMax - xMin) + xMin);
-            randY = Math.floor(Math.random() * (yMax - yMin) + yMin);
-            pointArr.push([randX, randY]);
-            //pointArr[i-1] = [randX, randY];
-        
-            return pointArr;
-        }
-
-        const genPosData = () => {
             if (posData) {
+                // for (let i=1; i<posData.length; i++) {
+                //     const boolArr = [true, false];
+                //     const points = [posData[i]];
+        
+                //     calcIntermediateNodes(posData[i-1], posData[i], boolArr[i%2], 0.9).forEach((node) => {
+                //     points.push(node);
+
+                //     points.push(posData[i]);
+                // });
+                // }
                 const pointArr1 = [posData[0]];
                 const intermediateNodes1 = calcIntermediateNodes(posData[0], posData[1], false, 0.9); //seems to be an appropriate factor. Might need to vary dep on screen size
 
@@ -193,9 +166,9 @@ export function HomePage({posts, fonts}: HPInput) {
                 });
                 pointArr2.push(posData[2]);
 
+                //console.log(toBeCcData)
+                // setCcData(toBeCcData);
                 setCcData([
-                    //[posData[0], calcIntermediateNode(posData[0], posData[1]), posData[1]],
-                    //[posData[1], calcIntermediateNode(posData[0], posData[1]), posData[2]]
                     pointArr1,
                     pointArr2
                 ]);
