@@ -202,7 +202,7 @@ export function AudioWidget({open, startTrackInd, trackArr, font, skip, playing,
                         <RotateCcw />
                     </div>
                     {skip? <h2 onClick={skipBackwards} className="text-md"><RewindIcon /></h2> : <></>}
-                    <div className="p-4 rounded-full bg-[#F8E663]">
+                    <div className="p-4 rounded-full bg-[#f0bf4d]">
                         <h2 onClick={playPause} className="text-lg font-bold">{isPlaying? <PauseIcon className='text-black strokeWidth-[3]'/>: <PlayIcon className='text-black strokeWidth-[3]'/>}</h2>
                     </div>
                     {skip? <h2 onClick={skipForward} className="text-md"><FastForward /></h2> : <></>}

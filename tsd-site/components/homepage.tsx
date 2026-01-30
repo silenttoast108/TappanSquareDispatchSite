@@ -195,9 +195,9 @@ export function HomePage({posts, fonts}: HPInput) {
                     <div key = {ind}>
                         {
                         ind % 2 == 1?
-                            <li className="flex flex-row justify-between items-center py-13 px-[5%] sm:px-[3%] gap-x-[20%]" key={post.id}>
+                            <li className="flex flex-row justify-between items-center pt-13 pb-22 px-[5%] gap-x-[20%]" key={post.id}>
                                 {/* gap-x-[25%] sm:gap-x-[30%] */}
-                                <div className='z-2 relative flex items-center justify-center flex-initial h-[350px] w-[350px] flex-shrink-0 rounded-full border border-1 border-slate-300 m-2 hover:border-[#f0bf4d] hover:border-2'>
+                                <div className='z-2 relative flex items-center justify-center flex-initial h-[350px] w-[350px] flex-shrink-0 rounded-full border border-1 border-slate-300 m-2 hover:border-[#f0bf4d] hover:border-4 duration-500'>
                                     <img
                                         className="z-1 rounded-full transition-filter duration-500 group-hover:brightness-50"
                                         src={urlFor(post.image)
@@ -209,7 +209,7 @@ export function HomePage({posts, fonts}: HPInput) {
                                         {/* <div ref={l2ref} onClick={() => (handleRoute(posts[1]))} className="cursor-pointer opacity-0 hover:opacity-100 absolute inset-0 w-full h-full z-2 flex flex-col justify-center items-center text-center text-slate-300 overflow-hidden bg-slate-600/60 rounded-full duration-300 px-4 py-13"> */}
                                             {
                                             post.type != 'story'?
-                                                <div ref={refArr[ind]} className="text-slate-300 cursor-pointer opacity-0 hover:opacity-100 absolute inset-0 w-full h-full z-2 overflow-hidden bg-slate-600/60 rounded-full duration-300">
+                                                <div ref={refArr[ind]} className="text-[#ffffff] cursor-pointer opacity-0 hover:opacity-100 absolute inset-0 w-full h-full z-2 overflow-hidden bg-slate-600/60 rounded-full duration-500">
                                                     <div className="flex flex-col justify-center items-center text-center relative gap-y-2 w-full h-full rounded-full px-[10%]">
                                                         <h2 className="text-xl">{post.title}</h2>
                                                         <hr className="w-full border border-slate-300 border-1 px-[10%]"/>
@@ -219,7 +219,7 @@ export function HomePage({posts, fonts}: HPInput) {
                                                     </div>
                                                 </div>
                                                  
-                                            :   <div ref={refArr[ind]} className="cursor-pointer opacity-0 hover:opacity-100 absolute inset-0 w-full h-full z-2 flex flex-col justify-center items-center text-center text-slate-300 overflow-hidden bg-slate-600/60 rounded-full duration-300">
+                                            :   <div ref={refArr[ind]} className="cursor-pointer opacity-0 hover:opacity-100 absolute inset-0 w-full h-full z-2 flex flex-col justify-center items-center text-center text-[#ffffff] overflow-hidden bg-slate-600/60 rounded-full duration-500">
                                                     <div className="flex flex-col justify-center items-center text-center relative gap-y-2 w-full h-full rounded-full px-[10%]">
                                                         <h2 className="text-xl">{post.title}</h2>
                                                         <hr className="w-full border border-slate-300 border-1"/>
@@ -233,7 +233,7 @@ export function HomePage({posts, fonts}: HPInput) {
                                 </div>
                                     {
                                     ind == 1?
-                                        <span className={`text-center ${fonts[1]} antialiased text-slate-300 overflow-hidden z-2 max-w-[800px]`}>
+                                        <span className={`text-center text-[20px] ${fonts[1]} antialiased text-slate-300 overflow-hidden z-2 max-w-[800px]`}>
                                             Oberlin's journalism students will use this podcast to feature audio content they have produced. In the past, 
                                             there have been other Oberlin student news podcasts, such as The Weekly from our campus newspaper, The Oberlin Review, 
                                             The Monday Morning Report from Oberlin's radio station, WOBC-FM (91.5), and Obercast, which was produced during a 2020 Winter 
@@ -243,7 +243,7 @@ export function HomePage({posts, fonts}: HPInput) {
                                     : <></>
                                     }
                             </li>
-                        :   <li className="flex flex-row justify-between items-center py-13 px-[5%] gap-x-[15%]" key={post.id}>
+                        :   <li className="flex flex-row justify-between items-center pt-13 pb-22 px-[5%] gap-x-[20%]" key={post.id}>
                                 {
                                 ind == 0?
                                     <div className={`text-center ${fonts[1]} antialiased text-slate-300 overflow-hidden max-w-[800px] z-2`}>
@@ -266,14 +266,14 @@ export function HomePage({posts, fonts}: HPInput) {
                                 }
                                 {
                                 ind == 2?
-                                    <span className={`text-center ${fonts[1]} antialiased text-slate-300 overflow-hidden z-2 max-w-[800px]`}>
+                                    <span className={`text-center ${fonts[1]} text-[20px] antialiased text-slate-300 overflow-hidden z-2 max-w-[800px]`}>
                                         Oberlin College is a small undergraduate liberal arts college in northeast Ohio that is known for its uniquely strong music conservatory,
                                         arts and humanities programs, STEM programs, and progressive politics. Oberlin is the oldest coeducational college in the U.S., 
                                         located in a historically liberal small town. The name of this podcast comes from the beautiful little square park where the town and college intersect.
                                     </span>
                                 : <></>
                                 }
-                                <div className='z-2 relative flex items-center justify-center flex-initial h-[350px] w-[350px] flex-shrink-0 rounded-full border border-1 border-slate-300 hover:border-[#f0bf4d] hover:border-2'>
+                                <div className='z-2 relative flex items-center justify-center flex-initial h-[350px] w-[350px] flex-shrink-0 rounded-full border border-1 border-slate-300 hover:border-[#f0bf4d] hover:border-4 duration-500'>
                                     <img
                                         className="z-1 rounded-full transition-filter duration-500 group-hover:brightness-50"
                                         src={urlFor(post.image)
@@ -284,7 +284,7 @@ export function HomePage({posts, fonts}: HPInput) {
                                     />
                                     {
                                     post.type != 'story'?
-                                        <div ref={refArr[ind]} className="text-slate-300 cursor-pointer opacity-0 hover:opacity-100 absolute inset-0 w-full h-full z-2 flex flex-col justify-center items-center text-center overflow-hidden bg-slate-600/60 rounded-full duration-300">
+                                        <div ref={refArr[ind]} className="text-[#ffffff] cursor-pointer opacity-0 hover:opacity-100 absolute inset-0 w-full h-full z-2 flex flex-col justify-center items-center text-center overflow-hidden bg-slate-600/60 rounded-full duration-500">
                                             <div className="flex flex-col justify-center items-center text-center relative w-full h-full rounded-full px-[10%] gap-y-2">
                                                 <h2 className="text-xl">{post.title}</h2>
                                                 <hr className="w-full border border-slate-300 border-1"/>
@@ -294,7 +294,7 @@ export function HomePage({posts, fonts}: HPInput) {
                                             </div>
                                         </div>
                                             
-                                    :   <div ref={refArr[ind]} className="cursor-pointer opacity-0 hover:opacity-100 absolute inset-0 w-full h-full z-2 flex flex-col justify-center items-center text-center text-slate-300 overflow-hidden bg-slate-600/60 rounded-full duration-300">
+                                    :   <div ref={refArr[ind]} className="cursor-pointer opacity-0 hover:opacity-100 absolute inset-0 w-full h-full z-2 flex flex-col justify-center items-center text-center text-[#ffffff] overflow-hidden bg-slate-600/60 rounded-full duration-500">
                                             <div className="flex flex-col justify-center items-center text-center relative w-full h-full rounded-full px-[10%] gap-y-2">
                                                 <h2 className="text-xl">{post.title}</h2>
                                                     <hr className="w-full border border-slate-300 border-1"/>
