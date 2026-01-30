@@ -6,7 +6,7 @@ import { SanityImageAssetDocument, PortableTextBlock, SanityDocument, PortableTe
 // import { CardinalCurve } from "react-svg-curve";
 // import * as motion from "motion/react"
 import * as d3 from "d3"
-import { use, useLayoutEffect, useRef, useState } from "react";
+import { RefObject, use, useLayoutEffect, useRef, useState } from "react";
 
 export interface HPInput {
     posts: collectionPost[],
@@ -14,6 +14,7 @@ export interface HPInput {
 }
 
 export type collectionPost = {
+    type: string,
     id: string,
     title: string,
     contributors: string,
@@ -29,11 +30,17 @@ const handleRoute = (post: collectionPost) => {//temp solution
 
 export function HomePage({posts, fonts}: HPInput) {
     // console.log(posts)
-    const l1ref = useRef<HTMLDivElement | null>(null);
-    const l2ref = useRef<HTMLDivElement | null>(null);
-    const l3ref = useRef<HTMLDivElement | null>(null);
+    const refArr: RefObject<HTMLDivElement | null>[] = [];
 
-    const refArr = [l1ref, l2ref, l3ref];
+    for (let i=0; i <posts.length; i++) {
+        refArr.push(useRef<HTMLDivElement | null>(null));
+        console.log(posts[i].type)
+    }
+    // const l1ref = useRef<HTMLDivElement | null>(null);
+    // const l2ref = useRef<HTMLDivElement | null>(null);
+    // const l3ref = useRef<HTMLDivElement | null>(null);
+
+    //const refArr = [l1ref, l2ref, l3ref];
 
     const [posData, setPosData] = useState<[number, number][]>();
     const [ccData, setCcData] = useState<[number, number][][]>();
@@ -165,14 +172,13 @@ export function HomePage({posts, fonts}: HPInput) {
             pointArr.push([randX, randY]);
             //pointArr[i-1] = [randX, randY];
         
-
             return pointArr;
         }
 
         const genPosData = () => {
             if (posData) {
                 const pointArr1 = [posData[0]];
-                const intermediateNodes1 = calcIntermediateNodes(posData[0], posData[1], false, 0.66); //seems to be an appropriate factor. Might need to vary dep on screen size
+                const intermediateNodes1 = calcIntermediateNodes(posData[0], posData[1], false, 0.9); //seems to be an appropriate factor. Might need to vary dep on screen size
 
                 intermediateNodes1.forEach((node) => {
                     pointArr1.push(node);
@@ -180,7 +186,7 @@ export function HomePage({posts, fonts}: HPInput) {
                 pointArr1.push(posData[1]);
                 
                 const pointArr2 = [posData[1]];
-                const intermediateNodes2 = calcIntermediateNodes(posData[1], posData[2], true, 0.66); // remember to add spacing between orbs and text blocks
+                const intermediateNodes2 = calcIntermediateNodes(posData[1], posData[2], true, 0.9); // remember to add spacing between orbs and text blocks
 
                 intermediateNodes2.forEach((node) => {
                     pointArr2.push(node);
@@ -206,10 +212,20 @@ export function HomePage({posts, fonts}: HPInput) {
     const path1 = generatePath(0, 0);
     const path2 = generatePath(1, 0)
 
+    const pathArr = [path1, path2]; //needs to be generated correctly
+    //const refArr = [];
+    // const textArr = ['', "", ""]
+    // const boolArr = [true, false];
+
     return (
         <div className = "relative flex flex-col items-center min-h-screen bg-black">
+            <div className='w-full flex items-center justify-center border-b border-b-1 border-b-slate-300 mb-4'>
+                <h1 className={`${fonts[0]} pl-4 antialiased text-slate-300 text-[50px] my-4 text-start cursor-pointer`}>The Tappan Square Dispatch</h1>
+            </div>
+            {/* //remember to add map function for svg above
+            //add conditional logic for post vs collection */}
             {
-                (path1 && path2)?
+            (path1 && path2)?
                 <svg className="absolute inset-0 w-full h-full pointer-events-none z-1">
                     {/* The Glow/Blur Layer */}
                     {/* <path
@@ -224,6 +240,7 @@ export function HomePage({posts, fonts}: HPInput) {
                     <path
                         d={path1}
                         stroke="url(#gradient)"
+                        // stroke = "#d8b4fe"
                         strokeWidth="4"
                         fill="none"
                         strokeLinecap="round"
@@ -241,6 +258,7 @@ export function HomePage({posts, fonts}: HPInput) {
                     {/* The Main Visible Line */}
                     <path
                         d={path2}
+                        // stroke="#d8b4fe"
                         stroke="url(#gradient)"
                         strokeWidth="4"
                         fill="none"
@@ -250,110 +268,146 @@ export function HomePage({posts, fonts}: HPInput) {
                     {/* Gradient Definition */}
                     <defs>
                         <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" stopColor="#818cf8" />
-                        <stop offset="100%" stopColor="#c084fc" />
+                        <stop offset="0%" stopColor="#c084fc" />
+                        <stop offset="100%" stopColor="#23062c" />
                         </linearGradient>
                     </defs>
                 </svg>
                 : <></>
-            }
-            
-            <div className='w-full flex items-center justify-center border-b border-b-1 border-b-slate-300 mb-4'>
-                <h1 className={`${fonts[0]} pl-4 antialiased text-slate-300 text-[50px] my-4 text-start cursor-pointer`}>The Tappan Square Dispatch</h1>
-            </div>
+            } 
             <ul className="flex flex-col gap-y-4 mx-auto max-w">
-                <li className="flex flex-row justify-between items-center py-[3%] px-[15%] gap-x-[15%]" key={posts[0].id}>
-                    <span className={`text-center ${fonts[1]} antialiased text-slate-300 overflow-hidden z-2`}>
-                        Oberlin College is a small undergraduate liberal arts college in northeast Ohio that is known for 
-                        its uniquely strong music conservatory, arts and humanities programs, STEM programs, and progressive 
-                        politics. Oberlin is the oldest coeducational college in the U.S., located in a historically liberal small town. 
-                        The name of this podcast comes from the beautiful little square park where the town and college intersect. 
-                    </span>
-                    <div className='relative flex items-center justify-center flex-initial h-[150px] w-[150px] md:h-[300px] md:w-[300px] flex-shrink-0 rounded-full border border-1 border-slate-300 m-2'>
-                        <img
-                            className="z-1 rounded-full transition-filter duration-300 group-hover:brightness-50"
-                            src={urlFor(posts[0].image)
-                            .width(300)
-                            .height(300)
-                            .url()}
-                            alt={`Image for ${posts[0].title}`}
-                        />
-                            <div ref={l1ref} onClick={() => (handleRoute(posts[0]))} className="cursor-pointer opacity-0 hover:opacity-100 absolute inset-0 w-full h-full z-2 flex flex-col justify-center items-center text-center text-slate-300 overflow-hidden bg-slate-600/60 rounded-full duration-300 px-4 py-13">
-                                <h2 className="text-md">{posts[0].title}</h2>
-                                <div className="text-sm overflow-hidden">
-                                    {Array.isArray(posts[0].description) && <PortableText value={posts[0].description} />}
-                                </div>
-                            </div>
-                    </div>
-                </li>
-                <li className="flex flex-row justify-between items-center py-[3%] px-[15%] gap-x-[15%]" key={posts[1].id}>
-                    <div className='relative flex items-center justify-center flex-initial h-[150px] w-[150px] md:h-[300px] md:w-[300px] flex-shrink-0 rounded-full border border-1 border-slate-300 m-2'>
-                        <img
-                            className="z-1 rounded-full transition-filter duration-300 group-hover:brightness-50"
-                            src={urlFor(posts[1].image)
-                            .width(300)
-                            .height(300)
-                            .url()}
-                            alt={`Image for ${posts[1].title}`}
-                        />
-                            <div ref={l2ref} onClick={() => (handleRoute(posts[1]))} className="cursor-pointer opacity-0 hover:opacity-100 absolute inset-0 w-full h-full z-2 flex flex-col justify-center items-center text-center text-slate-300 overflow-hidden bg-slate-600/60 rounded-full duration-300 px-4 py-13">
-                                <h2 className="text-md">{posts[1].title}</h2>
-                                <div className="text-sm overflow-hidden">
-                                    {Array.isArray(posts[1].description) && <PortableText value={posts[1].description} />}
-                                </div>
-                            </div>
-                    </div>
-                    <span className={`text-center ${fonts[1]} antialiased text-slate-300 overflow-hidden z-2`}>
-                        Oberlin's journalism students will use this podcast to feature audio content they have produced. In the past, there have been other Oberlin student news podcasts, 
-                        such as The Weekly from our campus newspaper, The Oberlin Review, The Monday Morning Report from Oberlin's radio station, WOBC-FM (91.5), and Obercast, which was produced
-                         during a 2020 Winter Term class on podcasting. In Fall 2022, third-year student Hazel Feldstein created The Tappan Square Dispatch (TSD) to cover both campus and local town news.
-                    </span>
-                </li>
-                <li className="flex flex-row justify-between items-center py-[3%] px-[15%] gap-x-[15%]" key={posts[2].id}>
-                    <span className={`${fonts[1]} text-center antialiased text-slate-300 overflow-hidden z-2`}>
-                        Oberlin College is a small undergraduate liberal arts college in northeast Ohio that is known for 
-                        its uniquely strong music conservatory, arts and humanities programs, STEM programs, and progressive 
-                        politics. Oberlin is the oldest coeducational college in the U.S., located in a historically liberal small town. 
-                        The name of this podcast comes from the beautiful little square park where the town and college intersect. 
-                    </span>
-                    <div className='relative flex items-center justify-center flex-initial h-[150px] w-[150px] md:h-[300px] md:w-[300px] flex-shrink-0 rounded-full border border-1 border-slate-300'>
-                        <img
-                            className="z-1 rounded-full transition-filter duration-300 group-hover:brightness-50"
-                            src={urlFor(posts[2].image)
-                            .width(300)
-                            .height(300)
-                            .url()}
-                            alt={`Image for ${posts[2].title}`}
-                        />
-                            <div ref={l3ref} onClick={() => (handleRoute(posts[2]))} className="cursor-pointer opacity-0 hover:opacity-100 absolute inset-0 w-full h-full z-2 flex flex-col justify-center items-center text-center text-slate-300 overflow-hidden bg-slate-600/60 rounded-full duration-300 px-4 py-13">
-                                <h2 className="text-md">{posts[2].title}</h2>
-                                <div className="text-sm overflow-hidden">
-                                    {Array.isArray(posts[2].description) && <PortableText value={posts[2].description} />}
-                                </div>
-                            </div>
-                    </div>
-                </li>
-                {/* {posts.map((post: collectionPost, i) => (
-                <li className="flex flex-row my-2" key={post.id}>
-                    <div className="flex flex-col flex-1 items-start">
-                    <Link className="hover:underline" href={`/${post.slug}`}>
-                        <h2 className="text-xl font-semibold">{post.title || "null"}</h2>
-                    </Link>
-                    {Array.isArray(post.description) && <PortableText value={post.description} />}
-                    <p>{new Date(post.date).toLocaleDateString()}</p>
-                    </div>
-                    <img
-                    className="flex-shrink-0"
-                    src={urlFor(post.image)
-                        .width(200)
-                        .height(150)
-                        .url()}
-                    alt={post.image.alt || `Portrait of ${post.title}`}
-                    />
-                </li>
+            {
+                posts.map((post, ind) => (
+                    // <li className="flex flex-row justify-between items-center py-[3%] px-[10%] sm:px-[3%] gap-x-[25%] sm:gap-x-[30%]" key={post.id}>
+                    <div key = {ind}>
+                        {
+                        ind % 2 == 1?
+                            <li className="flex flex-row justify-between items-center py-[3%] px-[10%] sm:px-[3%] gap-x-[25%] sm:gap-x-[30%]" key={post.id}>
 
-                ))} */}
-            </ul>
+                                <div className='relative flex items-center justify-center flex-initial h-[300px] w-[300px] flex-shrink-0 rounded-full border border-1 border-slate-300 m-2'>
+                                    <img
+                                        className="z-1 rounded-full transition-filter duration-500 group-hover:brightness-50"
+                                        src={urlFor(post.image)
+                                        .width(300)
+                                        .height(300)
+                                        .url()}
+                                        alt={`Image for ${post.title}`}
+                                    />
+                                        {/* <div ref={l2ref} onClick={() => (handleRoute(posts[1]))} className="cursor-pointer opacity-0 hover:opacity-100 absolute inset-0 w-full h-full z-2 flex flex-col justify-center items-center text-center text-slate-300 overflow-hidden bg-slate-600/60 rounded-full duration-300 px-4 py-13"> */}
+                                            {
+                                            post.type != 'story'?
+                                                <div ref={refArr[ind]} onClick={() => (handleRoute(post))} className="text-[#f0bf4d] cursor-pointer opacity-0 hover:opacity-100 absolute inset-0 w-full h-full z-2 flex flex-col justify-center items-center text-center text-slate-300 overflow-hidden bg-slate-600/60 rounded-full duration-300 px-4 py-13">
+                                                    <h2 className="text-md">{`Collection: ${post.title}`}</h2>
+                                                    <div className="text-sm overflow-hidden">
+                                                        {Array.isArray(post.description) && <PortableText value={post.description} />}
+                                                    </div>
+                                                </div>
+                                                 
+                                            :   <div ref={refArr[ind]} onClick={() => (handleRoute(post))} className="text-[#f0bf4d] cursor-pointer opacity-0 hover:opacity-100 absolute inset-0 w-full h-full z-2 flex flex-col justify-center items-center text-center text-slate-300 overflow-hidden bg-slate-600/60 rounded-full duration-300 px-4 py-13">
+                                                    <h2 className="text-md">{post.title}</h2>
+                                                    <div className="text-sm overflow-hidden">
+                                                        {Array.isArray(post.description) && <PortableText value={post.description} />}
+                                                    </div>
+                                                </div>
+                                            }
+                                            {/* <h2 className="text-md">{post.title}</h2>
+                                            <div className="text-sm overflow-hidden">
+                                                {Array.isArray(post.description) && <PortableText value={post.description} />}
+                                            </div> */}
+                                        {/* </div> */}
+                                </div>
+                                    {
+                                    ind == 1?
+                                        <span className={`text-center ${fonts[1]} antialiased text-slate-300 overflow-hidden z-2 max-w-[800px]`}>
+                                            Oberlin's journalism students will use this podcast to feature audio content they have produced. In the past, 
+                                            there have been other Oberlin student news podcasts, such as The Weekly from our campus newspaper, The Oberlin Review, 
+                                            The Monday Morning Report from Oberlin's radio station, WOBC-FM (91.5), and Obercast, which was produced during a 2020 Winter 
+                                            Term class on podcasting. In Fall 2022, third-year student Hazel Feldstein created The Tappan Square Dispatch (TSD) 
+                                            to cover both campus and local town news.
+                                        </span>
+                                    : <></>
+                                    }
+                            </li>
+                        :   <li className="flex flex-row justify-between items-center py-[3%] px-[10%] sm:px-[3%] gap-x-[25%] sm:gap-x-[30%]" key={post.id}>
+
+                                {
+                                ind == 0?
+                                    <div className={`text-center ${fonts[1]} antialiased text-slate-300 overflow-hidden max-w-[800px] z-2`}>
+                                        <span className={`${fonts[1]} antialiased flex flex-row justify-center items-center text-[40px] my-3 text-purple-300`}>
+                                            WHAT ARE WE?
+                                        </span>
+                                        <hr className="w-full border-slate-300 border-1 my-3"/>
+                                        <div className="flex flex-row md:flex-col text-transparent bg-clip-text bg-gradient-to-b from-[#d1b919] to-[#e6e2ba]">
+                                            <div className="flex flex-row justify-between items-center my-3 px-10 text-slate-300 text-start">
+                                                <span className="text-[40px] bold mr-[10%] text-[#f0bf4d]">#1</span>
+                                                <span className="text-[25px] text-slate-300">A bridge between the college and community</span>
+                                            </div>
+                                            <div className="flex flex-row justify-between items-center my-3 px-10 text-slate-300 text-start">
+                                                <span className="text-[40px] bold mr-[10%] text-[#f0bf4d]">#2</span>
+                                                <span className="text-[25px] text-slate-300">A showcase of Oberlin journalism students' audio work</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                : <></>
+                                }
+                                {
+                                ind == 2?
+                                    <span className={`text-center ${fonts[1]} antialiased text-slate-300 overflow-hidden z-2 max-w-[800px]`}>
+                                        Oberlin College is a small undergraduate liberal arts college in northeast Ohio that is known for its uniquely strong music conservatory,
+                                        arts and humanities programs, STEM programs, and progressive politics. Oberlin is the oldest coeducational college in the U.S., 
+                                        located in a historically liberal small town. The name of this podcast comes from the beautiful little square park where the town and college intersect.
+                                    </span>
+                                : <></>
+                                }
+                                <div className='relative flex items-center justify-center flex-initial h-[300px] w-[300px] flex-shrink-0 rounded-full border border-1 border-slate-300'>
+                                    <img
+                                        className="z-1 rounded-full transition-filter duration-500 group-hover:brightness-50"
+                                        src={urlFor(post.image)
+                                        .width(300)
+                                        .height(300)
+                                        .url()}
+                                        alt={`Image for ${post.title}`}
+                                    />
+                                    {
+                                    post.type != 'story'?
+                                        <div ref={refArr[ind]} onClick={() => (handleRoute(posts[1]))} className="text-[#f0bf4d] cursor-pointer opacity-0 hover:opacity-100 absolute inset-0 w-full h-full z-2 flex flex-col justify-center items-center text-center text-slate-300 overflow-hidden bg-slate-600/60 rounded-full duration-300 px-4 py-13">
+                                            <h2 className="text-md">{`Collection: ${post.title}`}</h2>
+                                            <div className="text-sm overflow-hidden">
+                                                {Array.isArray(post.description) && <PortableText value={post.description} />}
+                                            </div>
+                                        </div>
+                                            
+                                    :   <div ref={refArr[ind]} onClick={() => (handleRoute(posts[1]))} className="cursor-pointer opacity-0 hover:opacity-100 absolute inset-0 w-full h-full z-2 flex flex-col justify-center items-center text-center text-slate-300 overflow-hidden bg-slate-600/60 rounded-full duration-300 px-4 py-13">
+                                            <h2 className="text-md">{post.title}</h2>
+                                            <div className="text-sm overflow-hidden">
+                                                {Array.isArray(post.description) && <PortableText value={post.description} />}
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </li>
+                        }
+                        {/* <div className='relative flex items-center justify-center flex-initial h-[300px] w-[300px] md:h-[300px] md:w-[300px] flex-shrink-0 rounded-full border border-1 border-slate-300 m-2'>
+                            <img
+                                className="z-1 rounded-full transition-filter duration-300 group-hover:brightness-50"
+                                src={urlFor(posts[0].image)
+                                .width(300)
+                                .height(300)
+                                .url()}
+                                alt={`Image for ${posts[0].title}`}
+                            />
+                                <div ref={l1ref} onClick={() => (handleRoute(posts[0]))} className="cursor-pointer opacity-0 hover:opacity-100 absolute inset-0 w-full h-full z-2 flex flex-col justify-center items-center text-center text-slate-300 overflow-hidden bg-slate-600/60 rounded-full duration-300 px-4 py-13">
+                                    <h2 className="text-md">{posts[0].title}</h2>
+                                    <div className="text-sm overflow-hidden">
+                                        {Array.isArray(posts[0].description) && <PortableText value={posts[0].description} />}
+                                    </div>
+                                </div>
+                        </div> */}
+                    {/* </li> */}
+                    </div>
+                ))
+            }
+            </ul>     
         </div>
     )
 }

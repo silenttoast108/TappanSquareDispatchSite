@@ -41,6 +41,7 @@ export default async function Home() {
   // console.log(sortedPosts)
   var postArr: collectionPost[] = []
   sortedPosts.map((post: SanityDocument) => postArr.push({
+    type: post._type,
     id: post._id,
     title: post.title,
     contributors: post.contributors,
