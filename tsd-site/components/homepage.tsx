@@ -1,12 +1,11 @@
 'use client'
 
 import { urlFor } from "@/app/sanity/sanityImageUrl";
-import { Link } from "lucide-react";
-import { SanityImageAssetDocument, PortableTextBlock, SanityDocument, PortableText } from "next-sanity";
+import { SanityImageAssetDocument, PortableTextBlock} from "next-sanity";
 // import { CardinalCurve } from "react-svg-curve";
 // import * as motion from "motion/react"
 import * as d3 from "d3"
-import { RefObject, use, useLayoutEffect, useRef, useState } from "react";
+import { RefObject, useEffect, useLayoutEffect, useRef, useState } from "react";
 
 export interface HPInput {
     posts: collectionPost[],
@@ -25,22 +24,16 @@ export type collectionPost = {
 }
 
 export function HomePage({posts, fonts}: HPInput) {
-    // console.log(posts)
+
     const refArr: RefObject<HTMLDivElement | null>[] = [];
 
     for (let i=0; i <posts.length; i++) {
         refArr.push(useRef<HTMLDivElement | null>(null));
-        console.log(posts[i].type);
-        // console.log(posts[i].slug);
     }
-    // const l1ref = useRef<HTMLDivElement | null>(null);
-    // const l2ref = useRef<HTMLDivElement | null>(null);
-    // const l3ref = useRef<HTMLDivElement | null>(null);
-
-    //const refArr = [l1ref, l2ref, l3ref];
 
     const [posData, setPosData] = useState<[number, number][]>();
     const [ccData, setCcData] = useState<[number, number][][]>();
+    const [hasMounted, setHasMounted] = useState<boolean>(false);
 
     const generatePath = (ind: number, tension: number) => {
         if (!ccData) return
@@ -110,7 +103,6 @@ export function HomePage({posts, fonts}: HPInput) {
         randX = Math.floor(Math.random() * (xMax - xMin) + xMin);
         randY = Math.floor(Math.random() * (yMax - yMin) + yMin);
         pointArr.push([randX, randY]);
-        //pointArr[i-1] = [randX, randY];
     
         return pointArr;
     }
@@ -137,38 +129,19 @@ export function HomePage({posts, fonts}: HPInput) {
             const toBeCcData: [number, number][][] = []
 
             if (posData) {
-                // for (let i=1; i<posData.length; i++) {
-                //     const boolArr = [true, false];
-                //     const points = [posData[i]];
+                for (let i=1; i<posData.length; i++) {
+                    const boolArr = [true, false];
+                    const points = [posData[i-1]];
         
-                //     calcIntermediateNodes(posData[i-1], posData[i], boolArr[i%2], 0.9).forEach((node) => {
-                //     points.push(node);
+                    calcIntermediateNodes(posData[i-1], posData[i], boolArr[i%2], 0.9).forEach((node) => {                    
+                        points.push(node);
+                    });
 
-                //     points.push(posData[i]);
-                // });
-                // }
-                const pointArr1 = [posData[0]];
-                const intermediateNodes1 = calcIntermediateNodes(posData[0], posData[1], false, 0.9); //seems to be an appropriate factor. Might need to vary dep on screen size
-
-                intermediateNodes1.forEach((node) => {
-                    pointArr1.push(node);
-                });
-                pointArr1.push(posData[1]);
-                
-                const pointArr2 = [posData[1]];
-                const intermediateNodes2 = calcIntermediateNodes(posData[1], posData[2], true, 0.9); // remember to add spacing between orbs and text blocks
-
-                intermediateNodes2.forEach((node) => {
-                    pointArr2.push(node);
-                });
-                pointArr2.push(posData[2]);
-
-                //console.log(toBeCcData)
-                // setCcData(toBeCcData);
-                setCcData([
-                    pointArr1,
-                    pointArr2
-                ]);
+                    points.push(posData[i]);
+                    toBeCcData.push(points);
+                }
+                console.log(toBeCcData);
+                setCcData(toBeCcData);
             }
         }
 
@@ -179,76 +152,46 @@ export function HomePage({posts, fonts}: HPInput) {
         return () => window.removeEventListener('resize', updatePositions);
     }, [posData]);
 
-    const path1 = generatePath(0, 0);
-    const path2 = generatePath(1, 0)
+    useEffect(() => {
+        setHasMounted(true);
+    }, []);
 
-    const pathArr = [path1, path2]; //needs to be generated correctly
-    //const refArr = [];
-    // const textArr = ['', "", ""]
-    // const boolArr = [true, false];
+    const pathArr: (string | null | undefined)[] = []
+    for (let i=0; i<posts.length-1; i++) {
+        pathArr.push(generatePath(i, 0));
+    }
 
     return (
         <div className = "relative flex flex-col items-center min-h-screen bg-black">
             <div className='w-full flex items-center justify-center border-b border-b-1 border-b-slate-300 mb-4'>
                 <h1 className={`${fonts[0]} pl-4 antialiased text-slate-300 text-[50px] my-4 text-start cursor-pointer`}>The Tappan Square Dispatch</h1>
             </div>
-            {/* //remember to add map function for svg above
-            //add conditional logic for post vs collection */}
             {
-            (path1 && path2)?
-                <svg className="absolute inset-0 w-full h-full pointer-events-none z-1">
-                    {/* The Glow/Blur Layer */}
-                    {/* <path
-                        d={path1}
-                        stroke="rgba(168, 85, 247, 0.2)" 
-                        strokeWidth="12"
-                        fill="none"
-                        className="blur-xl"
-                    /> */}
-                    
-                    {/* The Main Visible Line */}
-                    <path
-                        d={path1}
-                        //stroke="url(#gradient)"
-                        stroke = "#d8b4fe"
-                        strokeWidth="4"
-                        fill="none"
-                        strokeLinecap="round"
-                        //strokeDasharray="10 5" // Optional: Creates a dashed "mapped" look
-                    />
-
-                    {/* <path
-                        d={path2}
-                        stroke="rgba(168, 85, 247, 0.2)" 
-                        strokeWidth="12"
-                        fill="none"
-                        className="blur-xl"
-                    /> */}
-                    
-                    {/* The Main Visible Line */}
-                    <path
-                        d={path2}
-                        stroke="#d8b4fe"
-                        //stroke="url(#gradient)"
-                        strokeWidth="4"
-                        fill="none"
-                        strokeLinecap="round"
-                        //strokeDasharray="10 5" // Optional: Creates a dashed "mapped" look
-                    />
-                    {/* Gradient Definition */}
-                    <defs>
-                        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" stopColor="#c084fc" />
-                        <stop offset="100%" stopColor="#23062c" />
-                        </linearGradient>
-                    </defs>
+                hasMounted
+                ? <svg className="absolute inset-0 w-full h-full pointer-events-none z-1">
+                    {
+                        pathArr.map((path, i) => (
+                            path
+                            ? <path
+                                key={i}
+                                d={path}
+                                //stroke="url(#gradient)"
+                                stroke = "#d8b4fe"
+                                strokeWidth="4"
+                                fill="none"
+                                strokeLinecap="round"
+                                //strokeDasharray="10 5" // Optional: Creates a dashed "mapped" look
+                            />
+                            : <div key={i}></div>
+                        ))
+                    }
                 </svg>
                 : <></>
-            } 
+            }
+            
             <ul className="flex flex-col gap-y-4 mx-auto max-w">
             {
                 posts.map((post, ind) => (
-                    // <li className="flex flex-row justify-between items-center py-[3%] px-[10%] sm:px-[3%] gap-x-[25%] sm:gap-x-[30%]" key={post.id}>
                     <div key = {ind}>
                         {
                         ind % 2 == 1?
@@ -270,15 +213,8 @@ export function HomePage({posts, fonts}: HPInput) {
                                                     <div className="flex flex-col justify-center items-center text-center relative gap-y-2 w-full h-full rounded-full px-[10%]">
                                                         <h2 className="text-xl">{post.title}</h2>
                                                         <hr className="w-full border border-slate-300 border-1 px-[10%]"/>
-                                                        <h2 className="text-xl">{new Date(post.date).toLocaleDateString()}</h2>
+                                                        <h2 className="text-xl">{post.date}</h2>
                                                         <h2 className="text-lg">{post.contributors}</h2>
-                                                        {/* <div className="text-sm overflow-hidden">
-                                                            {Array.isArray(post.contributors) && <PortableText value={post.contributors} />}
-                                                        </div> */}
-                                                        {/* <h2 className="text-md">{`Collection: ${post.title}`}</h2>
-                                                        <div className="text-sm overflow-hidden">
-                                                            {Array.isArray(post.description) && <PortableText value={post.description} />}
-                                                        </div> */}
                                                         <a href={`/${post.slug}`} className="absolute w-full h-full top-0 left-0"></a>
                                                     </div>
                                                 </div>
@@ -289,23 +225,11 @@ export function HomePage({posts, fonts}: HPInput) {
                                                         <hr className="w-full border border-slate-300 border-1"/>
                                                         <h2 className="text-lg">{post.contributors}</h2>
                                                         <hr className="w-full border border-slate-300 border-1"/>
-                                                        <h2 className="text-xl">{new Date(post.date).toLocaleDateString()}</h2>
-                                                        {/* <div className="text-sm overflow-hidden">
-                                                            {Array.isArray(post.contributors) && <PortableText value={post.contributors} />}
-                                                        </div> */}
-                                                        {/* <h2 className="text-md">{post.title}</h2>
-                                                        <div className="text-sm overflow-hidden">
-                                                            {Array.isArray(post.description) && <PortableText value={post.description} />}
-                                                        </div> */}
+                                                        <h2 className="text-xl">{post.date}</h2>
                                                         <a href={`/${post.slug}`} className="absolute w-full h-full top-0 left-0"></a>
                                                     </div>
                                                 </div>
                                             }
-                                            {/* <h2 className="text-md">{post.title}</h2>
-                                            <div className="text-sm overflow-hidden">
-                                                {Array.isArray(post.description) && <PortableText value={post.description} />}
-                                            </div> */}
-                                        {/* </div> */}
                                 </div>
                                     {
                                     ind == 1?
@@ -320,7 +244,6 @@ export function HomePage({posts, fonts}: HPInput) {
                                     }
                             </li>
                         :   <li className="flex flex-row justify-between items-center py-13 px-[5%] gap-x-[15%]" key={post.id}>
-                                {/* gap-x-[25%] sm:gap-x-[30%] */}
                                 {
                                 ind == 0?
                                     <div className={`text-center ${fonts[1]} antialiased text-slate-300 overflow-hidden max-w-[800px] z-2`}>
@@ -365,12 +288,8 @@ export function HomePage({posts, fonts}: HPInput) {
                                             <div className="flex flex-col justify-center items-center text-center relative w-full h-full rounded-full px-[10%] gap-y-2">
                                                 <h2 className="text-xl">{post.title}</h2>
                                                 <hr className="w-full border border-slate-300 border-1"/>
-                                                <h2 className="text-xl">{new Date(post.date).toLocaleDateString()}</h2>
+                                                <h2 className="text-xl">{post.date}</h2>
                                                 <h2 className="text-lg">{post.contributors}</h2>
-                                                {/* <h2 className="text-md">{`Collection: ${post.title}`}</h2>
-                                                <div className="text-sm overflow-hidden">
-                                                    {Array.isArray(post.description) && <PortableText value={post.description} />}
-                                                </div> */}
                                                 <a href={`/${post.slug}`} className="absolute w-full h-full top-0 left-0"></a>
                                             </div>
                                         </div>
@@ -381,7 +300,7 @@ export function HomePage({posts, fonts}: HPInput) {
                                                     <hr className="w-full border border-slate-300 border-1"/>
                                                     <h2 className="text-lg">{post.contributors}</h2>
                                                     <hr className="w-full border border-slate-300 border-1"/>
-                                                    <h2 className="text-xl">{new Date(post.date).toLocaleDateString()}</h2>
+                                                    <h2 className="text-xl">{post.date}</h2>
                                                 <a href={`/${post.slug}`} className="absolute w-full h-full top-0 left-0"></a>
                                             </div>
                                         </div>
@@ -389,23 +308,6 @@ export function HomePage({posts, fonts}: HPInput) {
                                 </div>
                             </li>
                         }
-                        {/* <div className='relative flex items-center justify-center flex-initial h-[350px] w-[300px] md:h-[350px] md:w-[300px] flex-shrink-0 rounded-full border border-1 border-slate-300 m-2'>
-                            <img
-                                className="z-1 rounded-full transition-filter duration-300 group-hover:brightness-50"
-                                src={urlFor(posts[0].image)
-                                .width(300)
-                                .height(300)
-                                .url()}
-                                alt={`Image for ${posts[0].title}`}
-                            />
-                                <div ref={l1ref} onClick={() => (handleRoute(posts[0]))} className="cursor-pointer opacity-0 hover:opacity-100 absolute inset-0 w-full h-full z-2 flex flex-col justify-center items-center text-center text-slate-300 overflow-hidden bg-slate-600/60 rounded-full duration-300 px-4 py-13">
-                                    <h2 className="text-md">{posts[0].title}</h2>
-                                    <div className="text-sm overflow-hidden">
-                                        {Array.isArray(posts[0].description) && <PortableText value={posts[0].description} />}
-                                    </div>
-                                </div>
-                        </div> */}
-                    {/* </li> */}
                     </div>
                 ))
             }

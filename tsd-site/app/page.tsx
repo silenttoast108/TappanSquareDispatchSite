@@ -47,7 +47,7 @@ export default async function Home() {
     id: post._id,
     title: post.title,
     contributors: post.contributors,
-    date: post._updatedAt,
+    date: new Date(post._updatedAt).toLocaleDateString(),
     description: post.description,
     image: post.image,
     slug: post.slug.current
