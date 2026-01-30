@@ -9,13 +9,13 @@ import {client} from "./sanity/client";
 const COLLECTIONS_QUERY = `*[
   _type == "collectionOrb"
   && defined(slug.current)
-  ]|order(createdAt desc)[0...3]{_id, _updatedAt, title, slug, publishedAt, image, description}`; //fix range field
+  ]|order(createdAt desc)[0...3]{_id, _updatedAt, title, slug, publishedAt, image, description, contributors, _type}`; //fix range field
 
 const STORY_QUERY = `*[
   _type == "story"
   && defined(slug.current)
   && !defined(AssociatedCollection)
-  ]|order(createdAt desc){_id, _updatedAt, title, slug, publishedAt, "image": images[0], description}`;
+  ]|order(createdAt desc){_id, _updatedAt, title, slug, publishedAt, "image": images[0], description, contributors, _type}`;
 
 const options = { next: { revalidate: 30 } };
 
@@ -40,7 +40,9 @@ export default async function Home() {
   const sortedPosts = posts.sort(sortPosts);
   // console.log(sortedPosts)
   var postArr: collectionPost[] = []
-  sortedPosts.map((post: SanityDocument) => postArr.push({
+  sortedPosts.map((post: SanityDocument) => {
+    console.log(post._type);
+    postArr.push({
     type: post._type,
     id: post._id,
     title: post.title,
@@ -49,7 +51,7 @@ export default async function Home() {
     description: post.description,
     image: post.image,
     slug: post.slug.current
-  }));
+  })});
 
   return (
     <HomePage posts={postArr} fonts={[f1.className, epilogue.className]}/>

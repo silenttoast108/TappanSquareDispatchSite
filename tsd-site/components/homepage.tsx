@@ -24,17 +24,14 @@ export type collectionPost = {
     slug: string
 }
 
-const handleRoute = (post: collectionPost) => {//temp solution
-    window.open(`/${post.slug}`);
-}
-
 export function HomePage({posts, fonts}: HPInput) {
     // console.log(posts)
     const refArr: RefObject<HTMLDivElement | null>[] = [];
 
     for (let i=0; i <posts.length; i++) {
         refArr.push(useRef<HTMLDivElement | null>(null));
-        console.log(posts[i].type)
+        console.log(posts[i].type);
+        // console.log(posts[i].slug);
     }
     // const l1ref = useRef<HTMLDivElement | null>(null);
     // const l2ref = useRef<HTMLDivElement | null>(null);
@@ -69,10 +66,10 @@ export function HomePage({posts, fonts}: HPInput) {
         const difX = xArr[1] - xArr[0];
         const difY = yArr[1] - yArr[0];
 
-        const lowBoundX = xArr[0] + (difX/4);
-        const lowBoundY = yArr[0] + (difY/4);
-        const upBoundY = yArr[1] - (difY/4);
-        const upBoundX = xArr[1] - (difX/4);
+        const lowBoundX = xArr[0] + (difX/3);
+        const lowBoundY = yArr[0] + (difY/3);
+        const upBoundY = yArr[1] - (difY/3);
+        const upBoundX = xArr[1] - (difX/3);
 
         const newdifX = upBoundX - lowBoundX;
         const newdifY = upBoundY - lowBoundY;
@@ -212,8 +209,8 @@ export function HomePage({posts, fonts}: HPInput) {
                     {/* The Main Visible Line */}
                     <path
                         d={path1}
-                        stroke="url(#gradient)"
-                        // stroke = "#d8b4fe"
+                        //stroke="url(#gradient)"
+                        stroke = "#d8b4fe"
                         strokeWidth="4"
                         fill="none"
                         strokeLinecap="round"
@@ -231,8 +228,8 @@ export function HomePage({posts, fonts}: HPInput) {
                     {/* The Main Visible Line */}
                     <path
                         d={path2}
-                        // stroke="#d8b4fe"
-                        stroke="url(#gradient)"
+                        stroke="#d8b4fe"
+                        //stroke="url(#gradient)"
                         strokeWidth="4"
                         fill="none"
                         strokeLinecap="round"
@@ -255,31 +252,52 @@ export function HomePage({posts, fonts}: HPInput) {
                     <div key = {ind}>
                         {
                         ind % 2 == 1?
-                            <li className="flex flex-row justify-between items-center py-[3%] px-[10%] sm:px-[3%] gap-x-[25%] sm:gap-x-[30%]" key={post.id}>
-
-                                <div className='relative flex items-center justify-center flex-initial h-[300px] w-[300px] flex-shrink-0 rounded-full border border-1 border-slate-300 m-2'>
+                            <li className="flex flex-row justify-between items-center py-13 px-[5%] sm:px-[3%] gap-x-[20%]" key={post.id}>
+                                {/* gap-x-[25%] sm:gap-x-[30%] */}
+                                <div className='z-2 relative flex items-center justify-center flex-initial h-[350px] w-[350px] flex-shrink-0 rounded-full border border-1 border-slate-300 m-2 hover:border-[#f0bf4d] hover:border-2'>
                                     <img
                                         className="z-1 rounded-full transition-filter duration-500 group-hover:brightness-50"
                                         src={urlFor(post.image)
-                                        .width(300)
-                                        .height(300)
+                                        .width(350)
+                                        .height(350)
                                         .url()}
                                         alt={`Image for ${post.title}`}
                                     />
                                         {/* <div ref={l2ref} onClick={() => (handleRoute(posts[1]))} className="cursor-pointer opacity-0 hover:opacity-100 absolute inset-0 w-full h-full z-2 flex flex-col justify-center items-center text-center text-slate-300 overflow-hidden bg-slate-600/60 rounded-full duration-300 px-4 py-13"> */}
                                             {
                                             post.type != 'story'?
-                                                <div ref={refArr[ind]} onClick={() => (handleRoute(post))} className="text-[#f0bf4d] cursor-pointer opacity-0 hover:opacity-100 absolute inset-0 w-full h-full z-2 flex flex-col justify-center items-center text-center text-slate-300 overflow-hidden bg-slate-600/60 rounded-full duration-300 px-4 py-13">
-                                                    <h2 className="text-md">{`Collection: ${post.title}`}</h2>
-                                                    <div className="text-sm overflow-hidden">
-                                                        {Array.isArray(post.description) && <PortableText value={post.description} />}
+                                                <div ref={refArr[ind]} className="text-slate-300 cursor-pointer opacity-0 hover:opacity-100 absolute inset-0 w-full h-full z-2 overflow-hidden bg-slate-600/60 rounded-full duration-300">
+                                                    <div className="flex flex-col justify-center items-center text-center relative gap-y-2 w-full h-full rounded-full px-[10%]">
+                                                        <h2 className="text-xl">{post.title}</h2>
+                                                        <hr className="w-full border border-slate-300 border-1 px-[10%]"/>
+                                                        <h2 className="text-xl">{new Date(post.date).toLocaleDateString()}</h2>
+                                                        <h2 className="text-lg">{post.contributors}</h2>
+                                                        {/* <div className="text-sm overflow-hidden">
+                                                            {Array.isArray(post.contributors) && <PortableText value={post.contributors} />}
+                                                        </div> */}
+                                                        {/* <h2 className="text-md">{`Collection: ${post.title}`}</h2>
+                                                        <div className="text-sm overflow-hidden">
+                                                            {Array.isArray(post.description) && <PortableText value={post.description} />}
+                                                        </div> */}
+                                                        <a href={`/${post.slug}`} className="absolute w-full h-full top-0 left-0"></a>
                                                     </div>
                                                 </div>
                                                  
-                                            :   <div ref={refArr[ind]} onClick={() => (handleRoute(post))} className="text-[#f0bf4d] cursor-pointer opacity-0 hover:opacity-100 absolute inset-0 w-full h-full z-2 flex flex-col justify-center items-center text-center text-slate-300 overflow-hidden bg-slate-600/60 rounded-full duration-300 px-4 py-13">
-                                                    <h2 className="text-md">{post.title}</h2>
-                                                    <div className="text-sm overflow-hidden">
-                                                        {Array.isArray(post.description) && <PortableText value={post.description} />}
+                                            :   <div ref={refArr[ind]} className="cursor-pointer opacity-0 hover:opacity-100 absolute inset-0 w-full h-full z-2 flex flex-col justify-center items-center text-center text-slate-300 overflow-hidden bg-slate-600/60 rounded-full duration-300">
+                                                    <div className="flex flex-col justify-center items-center text-center relative gap-y-2 w-full h-full rounded-full px-[10%]">
+                                                        <h2 className="text-xl">{post.title}</h2>
+                                                        <hr className="w-full border border-slate-300 border-1"/>
+                                                        <h2 className="text-lg">{post.contributors}</h2>
+                                                        <hr className="w-full border border-slate-300 border-1"/>
+                                                        <h2 className="text-xl">{new Date(post.date).toLocaleDateString()}</h2>
+                                                        {/* <div className="text-sm overflow-hidden">
+                                                            {Array.isArray(post.contributors) && <PortableText value={post.contributors} />}
+                                                        </div> */}
+                                                        {/* <h2 className="text-md">{post.title}</h2>
+                                                        <div className="text-sm overflow-hidden">
+                                                            {Array.isArray(post.description) && <PortableText value={post.description} />}
+                                                        </div> */}
+                                                        <a href={`/${post.slug}`} className="absolute w-full h-full top-0 left-0"></a>
                                                     </div>
                                                 </div>
                                             }
@@ -301,8 +319,8 @@ export function HomePage({posts, fonts}: HPInput) {
                                     : <></>
                                     }
                             </li>
-                        :   <li className="flex flex-row justify-between items-center py-[3%] px-[10%] sm:px-[3%] gap-x-[25%] sm:gap-x-[30%]" key={post.id}>
-
+                        :   <li className="flex flex-row justify-between items-center py-13 px-[5%] gap-x-[15%]" key={post.id}>
+                                {/* gap-x-[25%] sm:gap-x-[30%] */}
                                 {
                                 ind == 0?
                                     <div className={`text-center ${fonts[1]} antialiased text-slate-300 overflow-hidden max-w-[800px] z-2`}>
@@ -332,35 +350,46 @@ export function HomePage({posts, fonts}: HPInput) {
                                     </span>
                                 : <></>
                                 }
-                                <div className='relative flex items-center justify-center flex-initial h-[300px] w-[300px] flex-shrink-0 rounded-full border border-1 border-slate-300'>
+                                <div className='z-2 relative flex items-center justify-center flex-initial h-[350px] w-[350px] flex-shrink-0 rounded-full border border-1 border-slate-300 hover:border-[#f0bf4d] hover:border-2'>
                                     <img
                                         className="z-1 rounded-full transition-filter duration-500 group-hover:brightness-50"
                                         src={urlFor(post.image)
-                                        .width(300)
-                                        .height(300)
+                                        .width(350)
+                                        .height(350)
                                         .url()}
                                         alt={`Image for ${post.title}`}
                                     />
                                     {
                                     post.type != 'story'?
-                                        <div ref={refArr[ind]} onClick={() => (handleRoute(posts[1]))} className="text-[#f0bf4d] cursor-pointer opacity-0 hover:opacity-100 absolute inset-0 w-full h-full z-2 flex flex-col justify-center items-center text-center text-slate-300 overflow-hidden bg-slate-600/60 rounded-full duration-300 px-4 py-13">
-                                            <h2 className="text-md">{`Collection: ${post.title}`}</h2>
-                                            <div className="text-sm overflow-hidden">
-                                                {Array.isArray(post.description) && <PortableText value={post.description} />}
+                                        <div ref={refArr[ind]} className="text-slate-300 cursor-pointer opacity-0 hover:opacity-100 absolute inset-0 w-full h-full z-2 flex flex-col justify-center items-center text-center overflow-hidden bg-slate-600/60 rounded-full duration-300">
+                                            <div className="flex flex-col justify-center items-center text-center relative w-full h-full rounded-full px-[10%] gap-y-2">
+                                                <h2 className="text-xl">{post.title}</h2>
+                                                <hr className="w-full border border-slate-300 border-1"/>
+                                                <h2 className="text-xl">{new Date(post.date).toLocaleDateString()}</h2>
+                                                <h2 className="text-lg">{post.contributors}</h2>
+                                                {/* <h2 className="text-md">{`Collection: ${post.title}`}</h2>
+                                                <div className="text-sm overflow-hidden">
+                                                    {Array.isArray(post.description) && <PortableText value={post.description} />}
+                                                </div> */}
+                                                <a href={`/${post.slug}`} className="absolute w-full h-full top-0 left-0"></a>
                                             </div>
                                         </div>
                                             
-                                    :   <div ref={refArr[ind]} onClick={() => (handleRoute(posts[1]))} className="cursor-pointer opacity-0 hover:opacity-100 absolute inset-0 w-full h-full z-2 flex flex-col justify-center items-center text-center text-slate-300 overflow-hidden bg-slate-600/60 rounded-full duration-300 px-4 py-13">
-                                            <h2 className="text-md">{post.title}</h2>
-                                            <div className="text-sm overflow-hidden">
-                                                {Array.isArray(post.description) && <PortableText value={post.description} />}
+                                    :   <div ref={refArr[ind]} className="cursor-pointer opacity-0 hover:opacity-100 absolute inset-0 w-full h-full z-2 flex flex-col justify-center items-center text-center text-slate-300 overflow-hidden bg-slate-600/60 rounded-full duration-300">
+                                            <div className="flex flex-col justify-center items-center text-center relative w-full h-full rounded-full px-[10%] gap-y-2">
+                                                <h2 className="text-xl">{post.title}</h2>
+                                                    <hr className="w-full border border-slate-300 border-1"/>
+                                                    <h2 className="text-lg">{post.contributors}</h2>
+                                                    <hr className="w-full border border-slate-300 border-1"/>
+                                                    <h2 className="text-xl">{new Date(post.date).toLocaleDateString()}</h2>
+                                                <a href={`/${post.slug}`} className="absolute w-full h-full top-0 left-0"></a>
                                             </div>
                                         </div>
                                     }
                                 </div>
                             </li>
                         }
-                        {/* <div className='relative flex items-center justify-center flex-initial h-[300px] w-[300px] md:h-[300px] md:w-[300px] flex-shrink-0 rounded-full border border-1 border-slate-300 m-2'>
+                        {/* <div className='relative flex items-center justify-center flex-initial h-[350px] w-[300px] md:h-[350px] md:w-[300px] flex-shrink-0 rounded-full border border-1 border-slate-300 m-2'>
                             <img
                                 className="z-1 rounded-full transition-filter duration-300 group-hover:brightness-50"
                                 src={urlFor(posts[0].image)
