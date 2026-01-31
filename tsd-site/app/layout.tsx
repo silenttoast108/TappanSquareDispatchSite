@@ -4,16 +4,6 @@ import "./globals.css";
 import Link from "next/link";
 import BackButton from "@/components/backButton";
 
-// const geistSans = Geist({
-//   variable: "--font-geist-sans",
-//   subsets: ["latin"],
-// });
-
-// const geistMono = Geist_Mono({
-//   variable: "--font-geist-mono",
-//   subsets: ["latin"],
-// });
-
 const epilogue = Epilogue({
     //variable: "--font-epilogue",
     subsets: ["latin"]
@@ -39,7 +29,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <div className = 'w-full h-full bg-black'>
-          <header className={`${epilogue.className} antialiased flex flex-row justify-center py-4 sm:px-6 text-purple-300 text-[30px] bg-black w-full border-b border-b-1 border-b-slate-300`}>
+          <header className={`${epilogue.className} antialiased flex flex-row justify-center py-4 sm:px-6 text-purple-300 text-[23px] sm:text-[30px] bg-black w-full border-b border-b-1 border-b-slate-300`}>
             <div className="flex flex-0 justify-start ml-5">
               <BackButton />
             </div>
