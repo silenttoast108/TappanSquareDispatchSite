@@ -6,7 +6,7 @@ import {client} from "./sanity/client";
 const COLLECTIONS_QUERY = `*[
   _type == "collectionOrb"
   && defined(slug.current)
-  ]|order(date desc)[0...3]{_id, title, slug, image, description, contributors, _type, date}`; //fix range field
+  ]|order(date desc){_id, title, slug, image, description, contributors, _type, date}`; //fix range field
 
 const STORY_QUERY = `*[
   _type == "story"
