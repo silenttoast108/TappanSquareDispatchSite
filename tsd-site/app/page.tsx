@@ -15,7 +15,7 @@ const STORY_QUERY = `*[
   _type == "story"
   && defined(slug.current)
   && !defined(AssociatedCollection)
-  ]|order(createdAt desc){_id, _updatedAt, title, slug, publishedAt, "image": images[0], description, contributors, _type}`;
+  ]|order(createdAt desc){_id, _updatedAt, title, slug, publishedAt, image, description, contributors, _type}`;
 
 const options = { next: { revalidate: 30 } };
 

@@ -10,7 +10,7 @@ const STORIES_QUERY = `*[
 
 const STORY_QUERY = `*[
  _type == "story" && slug.current == $slug2
-] {_id, _updatedAt, title, description, contributors, spotifyURL, images, "audioURL": audioFile.asset->url, script}`
+] {_id, _updatedAt, title, description, contributors, spotifyURL, image, "audioURL": audioFile.asset->url, script}`
 
 const options = { next: { revalidate: 30 } };
 
@@ -41,7 +41,7 @@ export default async function storiesPage({
           contributors={story[0].contributors} 
           description={story[0].description} 
           spotifyURL={story[0].spotifyURL} 
-          images={story[0].images} 
+          image={story[0].image} 
           audioURL={story[0].audioURL}
         />
       )

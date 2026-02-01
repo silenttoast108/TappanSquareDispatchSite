@@ -10,49 +10,49 @@ import {defineField, defineType} from 'sanity'
 //   useCdn: false,
 // });
 
-export const header = defineType({
-  name: 'header',
-  title: 'header',
-  type: 'document',
-  fields: [
-    defineField({
-      name: 'title',
-      type: 'string',
-      validation: (rule) => rule.required(),
-    }),
-    defineField({
-      name: 'slug',
-      type: 'slug',
-      options: {source: 'title'},
-      validation: (rule) => rule.required(),
-    }),
-    defineField({
-      name: 'image',
-      type: 'image',
-    }),
-    defineField({
-        name: 'siteLogo', //figure out how this can be added to tab icon later
-        type: 'image'
-    }),
-    defineField({
-        name: 'subTitle',
-        type: 'string'
-    }),
-  ],
-});
+// export const header = defineType({
+//   name: 'header',
+//   title: 'header',
+//   type: 'document',
+//   fields: [
+//     defineField({
+//       name: 'title',
+//       type: 'string',
+//       validation: (rule) => rule.required(),
+//     }),
+//     defineField({
+//       name: 'slug',
+//       type: 'slug',
+//       options: {source: 'title'},
+//       validation: (rule) => rule.required(),
+//     }),
+//     defineField({
+//       name: 'image',
+//       type: 'image',
+//     }),
+//     defineField({
+//         name: 'siteLogo', //figure out how this can be added to tab icon later
+//         type: 'image'
+//     }),
+//     defineField({
+//         name: 'subTitle',
+//         type: 'string'
+//     }),
+//   ],
+// });
 
-export const floatingText = defineType({
-    name: 'floatingText',
-    title: 'FloatingText',
-    type: 'document',
-    fields: [
-        defineField({
-            name: 'text',
-            type: 'array',
-            of: [{type: 'block'}]
-        })
-    ]
-});
+// export const floatingText = defineType({
+//     name: 'floatingText',
+//     title: 'FloatingText',
+//     type: 'document',
+//     fields: [
+//         defineField({
+//             name: 'text',
+//             type: 'array',
+//             of: [{type: 'block'}]
+//         })
+//     ]
+// });
 
 export const collectionOrb = defineType({
     name: 'collectionOrb',
@@ -122,9 +122,8 @@ export const story = defineType({
             of: [{type: 'block'}]
         }),
         defineField({
-            name: 'images',
-            type: 'array',
-            of: [{type: 'image'}],
+            name: 'image',
+            type: 'image',
             validation: (rule) => rule.required(),
         }),
         defineField({
@@ -142,34 +141,34 @@ export const story = defineType({
     ]
 });
 
-export const theme = defineType({ //may or may not use this
-    name: 'theme',
-    title: 'Theme',
-    type: 'document',
-    fields: [
-        defineField({
-            name: 'font1',
-            type: 'string'
-        }),
-        defineField({
-            name: 'font2',
-            type: 'string'
-        }),
-        defineField({
-            name: 'font3',
-            type: 'string'
-        }),
-        defineField({
-            name: 'color1',
-            type: 'string'
-        }),
-        defineField({
-            name: 'color2',
-            type: 'string'
-        }),
-        defineField({
-            name: 'color3',
-            type: 'string'
-        }),
-    ]
-});
+// export const theme = defineType({ //may or may not use this
+//     name: 'theme',
+//     title: 'Theme',
+//     type: 'document',
+//     fields: [
+//         defineField({
+//             name: 'font1',
+//             type: 'string'
+//         }),
+//         defineField({
+//             name: 'font2',
+//             type: 'string'
+//         }),
+//         defineField({
+//             name: 'font3',
+//             type: 'string'
+//         }),
+//         defineField({
+//             name: 'color1',
+//             type: 'string'
+//         }),
+//         defineField({
+//             name: 'color2',
+//             type: 'string'
+//         }),
+//         defineField({
+//             name: 'color3',
+//             type: 'string'
+//         }),
+//     ]
+// });

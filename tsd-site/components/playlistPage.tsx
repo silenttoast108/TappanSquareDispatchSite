@@ -18,7 +18,7 @@ export type storyPost = {
     date: string,
     description: PortableTextBlock,
     spotifyURL: string,
-    images: SanityImageAssetDocument[],
+    image: SanityImageAssetDocument,
     audioURL: string,
     script: PortableTextBlock,
     storySlug: string
@@ -59,26 +59,25 @@ export default function PlaylistPage({
                     {storyPosts[0].collection}
                 </Link> */}
                 <div className='px-20 w-full flex items-center justify-center border-b border-b-1 border-b-slate-300'>
-                    <h1 className={`${fonts[0]} pl-4 antialiased text-slate-300 text-[50px] my-4 text-start`}>{storyPosts[0].collection}</h1>
+                    <h1 className={`${fonts[0]} pl-4 antialiased text-slate-300 text-[35px] sm:text-[50px] my-4 text-start`}>{storyPosts[0].collection}</h1>
                 </div>
             </div>
             <ul className="gap-y-4 px-20 mx-auto w-full mb-50">
                 {storyPosts.map((post: storyPost, i) => (
                 <li className="my-2" key={i}>
                     <div className={`${fonts[1]} z-1 group text-slate-300 antialiased flex flex-row p-2 my-2 justify-between items-center`}>
-                        <Link href={`/${slug}/${post.storySlug}`}>
-                            <div className="flex flex-col gap-y-2">
-                                <h2 className="group-hover:underline text-xl font-semibold">{post.title || "null"}</h2>
-                            <p className='text-m'>{`By ${post.contributors}`}</p>
-                                <div className='italic'>
-                                    {Array.isArray(post.description) && <PortableText value={post.description} />}
-                                </div>               
-                            </div>
-                        </Link>
-                        <button onClick={(e) => {handleStorySelect(i)}} className="relative w-[150px] h-[150px] flex-shrink-0 rounded-full overflow-hidden cursor-pointer appearance-none border-none bg-gray-200">
+                        <div className="relative flex flex-col">
+                            <h2 className="group-hover:underline text-2xl pb-1 font-semibold">{post.title || "null"}</h2>
+                            <p className='text-lg pb-4 max-h-[145px] overflow-hidden'>{`By ${post.contributors}`}</p>
+                            <div className='text-md italic max-h-[145px] overflow-hidden pr-3'>
+                                {Array.isArray(post.description) && <PortableText value={post.description} />}
+                            </div>       
+                            <a href={`/${slug}/${post.storySlug}`} className="absolute w-full h-full top-0 left-0"></a>        
+                        </div>
+                        <button onClick={(_e) => {handleStorySelect(i)}} className="relative w-[170px] h-[170px] flex-shrink-0 rounded-full overflow-hidden cursor-pointer appearance-none border-none bg-gray-200">
                             <img
-                                className="rounded-full transition-filter duration-300 group-hover:brightness-50"
-                                src={urlFor(post.images[0])
+                                className="rounded-full transition-filter duration-300 group-hover:brightness-50 border border-slate-300 border-1"
+                                src={urlFor(post.image)
                                 .width(300)
                                 .height(300)
                                 .url()}

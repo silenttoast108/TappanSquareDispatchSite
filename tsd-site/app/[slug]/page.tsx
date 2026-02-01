@@ -10,12 +10,12 @@ import { title } from "process";
 //used for obtaining all stories in a collection
 const STORIES_QUERY = `*[
  _type == "story" && AssociatedCollection->slug.current == $slug
- ]|order(_updatedAt desc) {_id, title, description, contributors, spotifyURL, images, "audioURL": audioFile.asset->url, "collection": AssociatedCollection->title, slug}`; //hopefully connection field is correctly defd
+ ]|order(_updatedAt desc) {_id, title, description, contributors, spotifyURL, image, "audioURL": audioFile.asset->url, "collection": AssociatedCollection->title, slug}`; //hopefully connection field is correctly defd
 
  //used for obtaining singular story that is not in a collection
 const STORY_QUERY = `*[
  _type == "story" && slug.current == $slug
-] {_id, _updatedAt, title, description, contributors, spotifyURL, images, "audioURL": audioFile.asset->url, script}`
+] {_id, _updatedAt, title, description, contributors, spotifyURL, image, "audioURL": audioFile.asset->url, script}`
 
 const options = { next: { revalidate: 30 } };
 //var startTrackInd = 0;
@@ -50,7 +50,7 @@ export default async function storiesPage({
           date: post._updatedAt,
           description: post.description,
           spotifyURL: post.spotifyURL,
-          images: post.images,
+          image: post.image,
           audioURL: post.audioURL,
           script: post.script,
           storySlug: post.slug.current
@@ -72,7 +72,7 @@ export default async function storiesPage({
           contributors={story[0].contributors} 
           description={story[0].description} 
           spotifyURL={story[0].spotifyURL} 
-          images={story[0].images} 
+          image={story[0].image} 
           audioURL={story[0].audioURL}
         />
       )

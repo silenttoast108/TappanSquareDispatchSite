@@ -24,12 +24,12 @@ export interface TPInput {
     date: string,
     description: PortableTextBlock,
     spotifyURL: string, //might be correct,
-    images: SanityImageAssetDocument[],
+    image: SanityImageAssetDocument,
     audioURL: string,
     script: PortableTextBlock,
 }
 
-export default function TranscriptPage({title, contributors, date, description, spotifyURL, images, audioURL, script}: TPInput) {
+export default function TranscriptPage({title, contributors, date, description, spotifyURL, image, audioURL, script}: TPInput) {
     // const [imageWidth, setImageWidth] = useState(0);
     // const imageRef = useRef<SanityImageAssetDocument | null>(null);
 
@@ -53,7 +53,7 @@ export default function TranscriptPage({title, contributors, date, description, 
                 </div>               
             </div>
           
-            <div className={`${f2.className} pl-4 antialiased w-full flex flex-row justify-start text-purple-300 text-lg gap-x-4 py-4`}>
+            <div className={`${f2.className} px-4 antialiased w-full flex flex-row justify-start text-purple-300 text-lg gap-x-4 py-4`}>
                 <div className="flex flex-row items-center justify-center gap-x-3 border rounded-xl border-purple-300 hover:border-slate-300 hover:text-slate-300 px-2">
                         <ShareButton/>
                     </div>
@@ -74,21 +74,10 @@ export default function TranscriptPage({title, contributors, date, description, 
                     </div>
                 </Link>
             </div>
-            <div className="pl-4  w-full flex flex-row justify-start">
-                {/* {images.map((image, i) => (
-                        <img
-                            key={i}
-                            className=""
-                            src={urlFor(image)
-                            .width(200)
-                            .height(150)
-                            .url()}
-                            alt={`Image for ${title}`}
-                        />
-                ))} */}
+            <div className="px-4  w-full flex flex-row justify-start">
                 <img
                     className="rounded-t-lg"
-                    src={urlFor(images[0])
+                    src={urlFor(image)
                     .width(600)
                     .height(450)
                     .url()}

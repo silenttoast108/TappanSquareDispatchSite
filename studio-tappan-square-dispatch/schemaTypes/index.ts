@@ -1,3 +1,3 @@
-import {header, floatingText, collectionOrb, theme, story} from "./postTypes"
+import {collectionOrb, story} from "./postTypes" //header, floatingText, theme, 
 
-export const schemaTypes = [header, floatingText, collectionOrb, theme, story]
+export const schemaTypes = [collectionOrb, story]

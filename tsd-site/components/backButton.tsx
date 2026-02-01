@@ -6,8 +6,9 @@ import Link from "next/link";
 export default function BackButton() {
     const pathname = usePathname()
     const pathArr = pathname.split('/');
+    // console.log(pathArr);
     if (pathArr.length == 3) { //used to have other condition  && pathArr[2]=='expanded'
-        return <Link className="hover:text-purple-50" href={`/${pathArr[0]}`}>←</Link>
+        return <Link className="hover:text-purple-50" href={`/${pathArr[1]}`}>←</Link>
     }
     if (pathArr.length == 2 && pathArr[1] != '') {
         return <Link className="hover:text-purple-50" href='/'>←</Link>

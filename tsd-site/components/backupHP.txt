@@ -1,0 +1,145 @@
+{
+            (pathArr[0] && pathArr[1])?
+                <svg className="absolute inset-0 w-full h-full pointer-events-none z-1">
+
+                    <path
+                        d={pathArr[0]}
+                        //stroke="url(#gradient)"
+                        stroke = "#d8b4fe"
+                        strokeWidth="4"
+                        fill="none"
+                        strokeLinecap="round"
+                        //strokeDasharray="10 5" // Optional: Creates a dashed "mapped" look
+                    />
+
+                    {/* <path
+                        d={path2}
+                        stroke="rgba(168, 85, 247, 0.2)" 
+                        strokeWidth="12"
+                        fill="none"
+                        className="blur-xl"
+                    /> */}
+                    
+                    {/* The Main Visible Line */}
+                    <path
+                        d={pathArr[1]}
+                        stroke="#d8b4fe"
+                        //stroke="url(#gradient)"
+                        strokeWidth="4"
+                        fill="none"
+                        strokeLinecap="round"
+                        //strokeDasharray="10 5" // Optional: Creates a dashed "mapped" look
+                    />
+                    {/* Gradient Definition */}
+                    <defs>
+                        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stopColor="#c084fc" />
+                        <stop offset="100%" stopColor="#23062c" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+                : <></>
+            } 
+
+
+<ul 
+className="flex flex-col gap-y-4 mx-auto max-w">
+                <li className="flex flex-row justify-between items-center py-[3%] px-[10%] sm:px-[3%] gap-x-[25%] sm:gap-x-[30%]" key={posts[0].id}>
+                    <div className={`text-center ${fonts[1]} antialiased text-slate-300 overflow-hidden max-w-[500px] z-2`}>
+                        <span className={`${fonts[1]} antialiased flex flex-row justify-center items-center text-[40px] my-3 text-purple-300`}>
+                            WHAT ARE WE?
+                        </span>
+                        <hr className="w-full border-slate-300 border-1 my-3"/>
+                        {/* <div className="text-transparent bg-clip-text bg-gradient-to-b from-[#d1b919] to-[#e6e2ba]"> [#f0bf4d]*/}
+                            <div className="flex flex-row justify-between items-center my-3 px-10 text-slate-300 text-start">
+                                <span className="text-[40px] bold mr-[10%] text-[#f0bf4d]">#1</span>
+                                <span className="text-[20px] text-purple-300">A bridge between the college and community</span>
+                            </div>
+                            <div className="flex flex-row justify-between items-center my-3 px-10 text-slate-300 text-start">
+                                <span className="text-[40px] bold mr-[10%] text-[#f0bf4d]">#2</span>
+                                <span className="text-[20px] text-purple-300">A showcase of Oberlin journalism students' audio work</span>
+                            </div>
+                        {/* </div> */}
+                    </div>
+                    <div className='relative flex items-center justify-center flex-initial h-[300px] w-[300px] md:h-[300px] md:w-[300px] flex-shrink-0 rounded-full border border-1 border-slate-300 m-2'>
+                        <img
+                            className="z-1 rounded-full transition-filter duration-300 group-hover:brightness-50"
+                            src={urlFor(posts[0].image)
+                            .width(300)
+                            .height(300)
+                            .url()}
+                            alt={`Image for ${posts[0].title}`}
+                        />
+                            <div ref={l1ref} onClick={() => (handleRoute(posts[0]))} className="cursor-pointer opacity-0 hover:opacity-100 absolute inset-0 w-full h-full z-2 flex flex-col justify-center items-center text-center text-slate-300 overflow-hidden bg-slate-600/60 rounded-full duration-300 px-4 py-13">
+                                <h2 className="text-md">{posts[0].title}</h2>
+                                <div className="text-sm overflow-hidden">
+                                    {Array.isArray(posts[0].description) && <PortableText value={posts[0].description} />}
+                                </div>
+                            </div>
+                    </div>
+                </li>
+                <li className="flex flex-row justify-between items-center py-[3%] px-[10%] gap-x-[25%]" key={posts[1].id}>
+                    <div className='relative flex items-center justify-center flex-initial h-[300px] w-[300px] flex-shrink-0 rounded-full border border-1 border-slate-300 m-2'>
+                        <img
+                            className="z-1 rounded-full transition-filter duration-300 group-hover:brightness-50"
+                            src={urlFor(posts[1].image)
+                            .width(300)
+                            .height(300)
+                            .url()}
+                            alt={`Image for ${posts[1].title}`}
+                        />
+                            <div ref={l2ref} onClick={() => (handleRoute(posts[1]))} className="cursor-pointer opacity-0 hover:opacity-100 absolute inset-0 w-full h-full z-2 flex flex-col justify-center items-center text-center text-slate-300 overflow-hidden bg-slate-600/60 rounded-full duration-300 px-4 py-13">
+                                <h2 className="text-md">{posts[1].title}</h2>
+                                <div className="text-sm overflow-hidden">
+                                    {Array.isArray(posts[1].description) && <PortableText value={posts[1].description} />}
+                                </div>
+                            </div>
+                    </div>
+                    <span className={`text-center ${fonts[1]} antialiased text-slate-300 overflow-hidden z-2 max-w-[800px]`}>
+                        Oberlin's journalism students will use this podcast to feature audio content they have produced. In the past, there have been other Oberlin student news podcasts, 
+                        such as The Weekly from our campus newspaper, The Oberlin Review, The Monday Morning Report from Oberlin's radio station, WOBC-FM (91.5), and Obercast, which was produced
+                         during a 2020 Winter Term class on podcasting. In Fall 2022, third-year student Hazel Feldstein created The Tappan Square Dispatch (TSD) to cover both campus and local town news.
+                    </span>
+                </li>
+                <li className="flex flex-row justify-between items-center py-[3%] px-[10%] gap-x-[25%]" key={posts[2].id}>
+                    <span className={`${fonts[1]} text-center antialiased text-slate-300 overflow-hidden z-2 max-w-[800px]`}>
+                        
+                    </span>
+                    <div className='relative flex items-center justify-center flex-initial h-[300px] w-[300px] flex-shrink-0 rounded-full border border-1 border-slate-300'>
+                        <img
+                            className="z-1 rounded-full transition-filter duration-300 group-hover:brightness-50"
+                            src={urlFor(posts[2].image)
+                            .width(300)
+                            .height(300)
+                            .url()}
+                            alt={`Image for ${posts[2].title}`}
+                        />
+                            <div ref={l3ref} onClick={() => (handleRoute(posts[2]))} className="cursor-pointer opacity-0 hover:opacity-100 absolute inset-0 w-full h-full z-2 flex flex-col justify-center items-center text-center text-slate-300 overflow-hidden bg-slate-600/60 rounded-full duration-300 px-4 py-13">
+                                <h2 className="text-md">{posts[2].title}</h2>
+                                <div className="text-sm overflow-hidden">
+                                    {Array.isArray(posts[2].description) && <PortableText value={posts[2].description} />}
+                                </div>
+                            </div>
+                    </div>
+                </li>
+                {posts.map((post: collectionPost, i) => (
+                <li className="flex flex-row my-2" key={post.id}>
+                    <div className="flex flex-col flex-1 items-start">
+                    <Link className="hover:underline" href={`/${post.slug}`}>
+                        <h2 className="text-xl font-semibold">{post.title || "null"}</h2>
+                    </Link>
+                    {Array.isArray(post.description) && <PortableText value={post.description} />}
+                    <p>{new Date(post.date).toLocaleDateString()}</p>
+                    </div>
+                    <img
+                    className="flex-shrink-0"
+                    src={urlFor(post.image)
+                        .width(200)
+                        .height(150)
+                        .url()}
+                    alt={post.image.alt || `Portrait of ${post.title}`}
+                    />
+                </li>
+
+                ))}
+            </ul>
