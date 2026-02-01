@@ -2,8 +2,6 @@
 
 import { urlFor } from "@/app/sanity/sanityImageUrl";
 import { SanityImageAssetDocument, PortableTextBlock} from "next-sanity";
-// import { CardinalCurve } from "react-svg-curve";
-// import * as motion from "motion/react"
 import * as d3 from "d3"
 import { RefObject, useEffect, useLayoutEffect, useRef, useState } from "react";
 
@@ -141,7 +139,7 @@ export function HomePage({posts, fonts}: HPInput) {
                     points.push(posData[i]);
                     toBeCcData.push(points);
                 }
-                console.log(toBeCcData);
+                //console.log(toBeCcData);
                 setCcData(toBeCcData);
             }
         }

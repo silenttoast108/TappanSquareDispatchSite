@@ -10,18 +10,16 @@ import { title } from "process";
 //used for obtaining all stories in a collection
 const STORIES_QUERY = `*[
  _type == "story" && AssociatedCollection->slug.current == $slug
- ]|order(_updatedAt desc) {_id, title, description, contributors, spotifyURL, image, "audioURL": audioFile.asset->url, "collection": AssociatedCollection->title, slug}`; //hopefully connection field is correctly defd
+ ]|order(date desc) {_id, title, description, contributors, spotifyURL, image, "audioURL": audioFile.asset->url, "collection": AssociatedCollection->title, slug, date}`; //hopefully connection field is correctly defd
 
  //used for obtaining singular story that is not in a collection
 const STORY_QUERY = `*[
  _type == "story" && slug.current == $slug
-] {_id, _updatedAt, title, description, contributors, spotifyURL, image, "audioURL": audioFile.asset->url, script}`
+] {_id, title, description, contributors, spotifyURL, image, "audioURL": audioFile.asset->url, script, date}`
 
 const options = { next: { revalidate: 30 } };
-//var startTrackInd = 0;
 
 const f1 = Oleo_Script({
-  //variable: "--font-epilogue",
   weight: "400",
   subsets: ["latin"]
 });
@@ -47,7 +45,7 @@ export default async function storiesPage({
           collection: post.collection,
           title: post.title,
           contributors: post.contributors,
-          date: post._updatedAt,
+          date: new Date(post.date).toLocaleDateString(),
           description: post.description,
           spotifyURL: post.spotifyURL,
           image: post.image,
@@ -67,7 +65,7 @@ export default async function storiesPage({
       return (
         <TranscriptPage 
           title={story[0].title} 
-          date={story[0]._updatedAt} 
+          date={new Date(story[0].date).toLocaleDateString()} 
           script={story[0].script} 
           contributors={story[0].contributors} 
           description={story[0].description} 

@@ -30,15 +30,6 @@ export interface TPInput {
 }
 
 export default function TranscriptPage({title, contributors, date, description, spotifyURL, image, audioURL, script}: TPInput) {
-    // const [imageWidth, setImageWidth] = useState(0);
-    // const imageRef = useRef<SanityImageAssetDocument | null>(null);
-
-    // useLayoutEffect(() => {
-    //     if (imageRef.current) {
-    //         // setImageWidth(imageRef.current.size)
-    //         console.log(imageRef.current.size)
-    //     }
-    // }, [images])
 
     return (
         <main className='flex flex-col items-center min-h-screen bg-black mx-[10%] border-x border-x-1 border-x-slate-300'>
