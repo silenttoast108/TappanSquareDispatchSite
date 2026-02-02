@@ -1,11 +1,9 @@
-import { PortableText, type SanityDocument } from "next-sanity";
+import { type SanityDocument } from "next-sanity";
 import { client } from "../sanity/client";
-import Link from "next/link";
 import { Epilogue, Oleo_Script } from "next/font/google";
 
 import TranscriptPage, {TPInput} from "@/components/transcriptPage";
 import PlaylistPage, {storyPost} from "@/components/playlistPage";
-import { title } from "process";
 
 //used for obtaining all stories in a collection
 const STORIES_QUERY = `*[

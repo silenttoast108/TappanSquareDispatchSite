@@ -181,7 +181,7 @@ export function HomePage({posts, fonts}: HPInput) {
                                 strokeWidth="4"
                                 fill="none"
                                 strokeLinecap="round"
-                                //strokeDasharray="10 5" // Optional: Creates a dashed "mapped" look
+                                //strokeDasharray="10 5" //dashed look
                             />
                             : <div key={i}></div>
                         ))
@@ -196,7 +196,7 @@ export function HomePage({posts, fonts}: HPInput) {
                     <div key = {ind}>
                         {
                         ind % 2 == 1?
-                            <li className="flex flex-row justify-between items-center pt-13 sm:pb-22 pb-14 px-[5%] sm:gap-x-[15%] md:gap-x-[20%] gap-x-[20%]" key={post.id}>
+                            <li className={`${ind>1? 'justify-start' : 'justify-between'} flex flex-row items-center pt-13 sm:pb-22 pb-14 px-[5%] sm:gap-x-[15%] md:gap-x-[20%] gap-x-[20%]`} key={post.id}>
                                 {/* gap-x-[25%] sm:gap-x-[30%] */}
                                 <div className='z-2 relative flex items-center justify-center flex-initial sm:h-[275px] sm:w-[275px] md:h-[350px] md:w-[350px] h-[200px] w-[200px] flex-shrink-0 rounded-full border border-1 border-slate-300 m-2 hover:border-[#f0bf4d] hover:border-4 duration-500'>
                                     <img
@@ -257,7 +257,7 @@ export function HomePage({posts, fonts}: HPInput) {
                                     : <></>
                                     }
                             </li>
-                        :   <li className="flex flex-row justify-between items-center pt-13 sm:pb-22 pb-14 px-[5%] sm:gap-x-[15%] md:gap-x-[20%] gap-x-[20%]" key={post.id}>
+                        :   <li className={`${ind>2 ? 'justify-end' : 'justify-between'} flex flex-row items-center pt-13 sm:pb-22 pb-14 px-[5%] sm:gap-x-[15%] md:gap-x-[20%] gap-x-[20%]`} key={post.id}>
                                 {
                                 ind == 0?
                                     <div className={`text-center ${fonts[1]} antialiased text-slate-300 max-w-[800px] z-2`}>
