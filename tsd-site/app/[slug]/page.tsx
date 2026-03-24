@@ -4,6 +4,7 @@ import { Epilogue, Oleo_Script } from "next/font/google";
 
 import TranscriptPage, {TPInput} from "@/components/transcriptPage";
 import PlaylistPage, {storyPost} from "@/components/playlistPage";
+import Contact from "@/components/contact";
 
 //used for obtaining all stories in a collection
 const STORIES_QUERY = `*[
@@ -36,7 +37,7 @@ export default async function storiesPage({
     // console.log(story);
     const slug = (await params).slug
 
-    if (!(collectionPosts.length == 0)) {//logic for clicking on a collection of stories
+    if (collectionPosts.length != 0) {//logic for clicking on a collection of stories
       var storyArr: storyPost[] = []
       collectionPosts.map((post: SanityDocument) => {
         storyArr.push({
@@ -59,7 +60,7 @@ export default async function storiesPage({
           slug={slug}        
         />
       )
-    } else {//logic for clicking on a singular story
+    } else if (story.length != 0) {//logic for clicking on a singular story
       return (
         <TranscriptPage 
           title={story[0].title} 
@@ -71,6 +72,10 @@ export default async function storiesPage({
           image={story[0].image} 
           audioURL={story[0].audioURL}
         />
+      )
+    } else {
+      return(
+        <Contact slug={slug} fonts={[f1.className, epilogue.className]} />
       )
     }
 }

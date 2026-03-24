@@ -36,9 +36,9 @@ export default function RootLayout({
             <div className="flex flex-1 justify-center">
               <Link className="hover:text-purple-50" href="/">Home</Link>
               <div className="mx-4 h-9 w-0.75 bg-purple-300"></div>
-              <Link className="hover:text-purple-50" href="/abt">Contact Us</Link>
+              <Link className="hover:text-purple-50" href="/con">Contact Us</Link>
               <div className="mx-4 h-9 w-0.75 bg-purple-300"></div>
-              <Link className="hover:text-purple-50" href="/contact">Attributions</Link>
+              <Link className="hover:text-purple-50" href="/atr">Attributions</Link>
             </div>
           </header>
           {children}
