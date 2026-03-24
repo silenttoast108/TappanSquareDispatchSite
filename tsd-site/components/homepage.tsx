@@ -190,15 +190,15 @@ export function HomePage({posts, fonts}: HPInput) {
                 : <></>
             }
             
-            <ul className="flex flex-col gap-y-4 mx-auto max-w">
+            <ul className="flex flex-col gap-y-2 sm:gap-y-4 mx-auto max-w">
             {
                 posts.map((post, ind) => (
                     <div key = {ind}>
                         {
                         ind % 2 == 1?
-                            <li className={`${ind>1? 'justify-start' : 'justify-between'} flex flex-row items-center pt-13 sm:pb-22 pb-14 px-[5%] sm:gap-x-[15%] md:gap-x-[20%] gap-x-[20%]`} key={post.id}>
-                                {/* gap-x-[25%] sm:gap-x-[30%] */}
-                                <div className='z-2 relative flex items-center justify-center flex-initial sm:h-[275px] sm:w-[275px] md:h-[350px] md:w-[350px] h-[200px] w-[200px] flex-shrink-0 rounded-full border border-1 border-slate-300 m-2 hover:border-[#f0bf4d] hover:border-4 duration-500'>
+                            <li className={`${ind>1? 'justify-start' : 'justify-between'} flex flex-row items-center pt-13 sm:pb-22 pb-14 sm:px-[5%] px-[2%] sm:gap-x-[15%] md:gap-x-[20%] gap-x-[5%]`} key={post.id}>
+                                {/* sm:h-[275px] sm:w-[275px] this will need to become a percent */}
+                                <div className='z-2 relative flex items-center justify-center flex-initial sm:h-[30%] sm:w-[30%] md:h-[37%] md:w-[37%] lg:h-[350px] lg:w-[350px] h-[32%] w-[32%] flex-shrink-0 rounded-full border border-1 border-slate-300 m-2 hover:border-[#f0bf4d] hover:border-4 duration-500'>
                                     <img
                                         className="z-1 rounded-full transition-filter duration-500 group-hover:brightness-50"
                                         src={urlFor(post.image)
@@ -247,7 +247,7 @@ export function HomePage({posts, fonts}: HPInput) {
                                 </div>
                                     {
                                     ind == 1?
-                                        <span className={`text-center text-[13px] md:text-[20px] ${fonts[1]} antialiased text-slate-300 overflow-hidden z-2 max-w-[800px]`}>
+                                        <span className={`text-center pl-[15%] sm:pl-[0] text-[10px] sm:text-[13px] md:text-[20px] ${fonts[1]} antialiased text-slate-300 overflow-hidden z-2 max-w-[800px]`}>
                                             Oberlin's journalism students will use this podcast to feature audio content they have produced. In the past, 
                                             there have been other Oberlin student news podcasts, such as The Weekly from our campus newspaper, The Oberlin Review, 
                                             The Monday Morning Report from Oberlin's radio station, WOBC-FM (91.5), and Obercast, which was produced during a 2020 Winter 
@@ -257,23 +257,27 @@ export function HomePage({posts, fonts}: HPInput) {
                                     : <></>
                                     }
                             </li>
-                        :   <li className={`${ind>2 ? 'justify-end' : 'justify-between'} flex flex-row items-center pt-13 sm:pb-22 pb-14 px-[5%] sm:gap-x-[15%] md:gap-x-[20%] gap-x-[20%]`} key={post.id}>
+                        :   <li className={`${ind>2 ? 'justify-end' : 'justify-between'} flex flex-row items-center pt-13 sm:pb-22 pb-14 sm:px-[5%] px-[2%] sm:gap-x-[15%] md:gap-x-[20%] gap-x-[5%]`} key={post.id}>
                                 {
                                 ind == 0?
-                                    <div className={`text-center ${fonts[1]} antialiased text-slate-300 max-w-[800px] z-2`}>
-                                        <span className={`${fonts[1]} antialiased flex flex-row justify-center items-center text-[32px] sm:text-[32px] md:text-[40px] my-3 text-purple-300`}>
+                                    <div className={`text-center ${fonts[1]} antialiased text-slate-300 max-w-[800px] z-2 mr-0 sm:mr-[-10%] lg:mr-0`}>
+                                        <span className={`${fonts[1]} text-[20px] sm:text-[32px] md:text-[40px] my-3 text-purple-300`}>
                                             WHAT ARE WE?
                                         </span>
+                                        {/* <span className={`${fonts[1]} antialiased flex flex-row justify-center items-center text-[32px] sm:text-[32px] md:text-[40px] my-3 text-purple-300`}>
+                                            WHAT ARE WE?
+                                        </span> */}
                                         {/* find a way to make this section a bit wider */}
                                         <hr className="w-full border-slate-300 border-1 my-3"/>
-                                        <div className="flex flex-col text-transparent bg-clip-text bg-gradient-to-b from-[#d1b919] to-[#e6e2ba]">
-                                            <div className="flex flex-row justify-between items-center my-3 px-10 text-slate-300 text-start">
-                                                <span className="text-[25px] sm:text-[32px] md:text-[40px] bold mr-[10%] text-[#f0bf4d]">#1</span>
-                                                <span className="text-[17px] sm:text-[23px] md:text-[25px] text-slate-300">A bridge between the college and community</span>
+                                        <div className="flex flex-row lg:flex-col text-transparent bg-clip-text">
+                                            {/* bg-gradient-to-b from-[#d1b919] to-[#e6e2ba] */}
+                                            <div className="flex flex-row justify-between items-center my-3 px-5 lg:px-10 text-slate-300 text-start">
+                                                <span className="text-[18px] sm:text-[25px] md:text-[35px] lg:text-[40px] bold mr-[10%] text-[#f0bf4d]">#1</span>
+                                                <span className="text-[12px] sm:text-[20px] md:text-[24px] lg:text-[25px] text-slate-300">A bridge between the college and community</span>
                                             </div>
-                                            <div className="flex flex-row justify-between items-center my-3 px-10 text-slate-300 text-start">
-                                                <span className="text-[25px] sm:text-[32px] md:text-[40px] bold mr-[10%] text-[#f0bf4d]">#2</span>
-                                                <span className="text-[17px] sm:text-[23px] md:text-[25px] text-slate-300">A showcase of Oberlin journalism students' audio work</span>
+                                            <div className="flex flex-row justify-between items-center my-3 px-5 lg:px-10 text-slate-300 text-start">
+                                                <span className="text-[18px] sm:text-[25px] md:text-[35px] lg:text-[40px] bold mr-[10%] text-[#f0bf4d]">#2</span>
+                                                <span className="text-[12px] sm:text-[20px] md:text-[24px] lg:text-[25px] text-slate-300">A showcase of Oberlin journalism students' audio work</span>
                                             </div>
                                         </div>
                                     </div>
@@ -281,14 +285,14 @@ export function HomePage({posts, fonts}: HPInput) {
                                 }
                                 {
                                 ind == 2?
-                                    <span className={`text-center ${fonts[1]} text-[13px] md:text-[20px] antialiased text-slate-300 overflow-hidden z-2 max-w-[800px]`}>
+                                    <span className={`text-center ${fonts[1]} pr-[15%] sm:pr-[0] text-[10px] sm:text-[13px] md:text-[20px] antialiased text-slate-300 overflow-hidden z-2 max-w-[800px]`}>
                                         Oberlin College is a small undergraduate liberal arts college in northeast Ohio that is known for its uniquely strong music conservatory,
                                         arts and humanities programs, STEM programs, and progressive politics. Oberlin is the oldest coeducational college in the U.S., 
                                         located in a historically liberal small town. The name of this podcast comes from the beautiful little square park where the town and college intersect.
                                     </span>
                                 : <></>
                                 }
-                                <div className='z-2 relative flex items-center justify-center flex-initial sm:h-[275px] sm:w-[275px] md:h-[350px] md:w-[350px] h-[200px] w-[200px] flex-shrink-0 rounded-full border border-1 border-slate-300 hover:border-[#f0bf4d] hover:border-4 duration-500'>
+                                <div className='z-2 relative flex items-center justify-center flex-initial sm:h-[30%] sm:w-[30%] md:h-[37%] md:w-[37%] lg:h-[350px] lg:w-[350px] h-[32%] w-[32%] flex-shrink-0 rounded-full border border-1 border-slate-300 hover:border-[#f0bf4d] hover:border-4 duration-500'>
                                     <img
                                         className="z-1 rounded-full transition-filter duration-500 group-hover:brightness-50"
                                         src={urlFor(post.image)
