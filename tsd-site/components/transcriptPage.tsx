@@ -34,7 +34,7 @@ export default function TranscriptPage({title, contributors, date, description, 
     return (
         <main className='flex flex-col items-center min-h-screen bg-black mx-[10%] border-x border-x-1 border-x-slate-300'>
             <div className='w-full flex items-center border-b border-b-1 border-b-slate-300'>
-                <h1 className={`${f1.className} pl-4 antialiased text-slate-300 text-[50px] my-4 text-start`}>{title}</h1>
+                <h1 className={`${f1.className} pl-4 antialiased text-slate-300 text-[25px] sm:text-[50px] my-4 text-start`}>{title}</h1>
             </div>
             <div className = {`${f2.className} w-full antialiased flex flex-col jusitfy-start gap-y-2 border-b border-b-1 border-b-slate-300 pt-2 pb-4`}>
                 <p className='pl-4 text-xs text-slate-600'>{new Date(date).toISOString()}</p>
@@ -44,7 +44,7 @@ export default function TranscriptPage({title, contributors, date, description, 
                 </div>               
             </div>
           
-            <div className={`${f2.className} px-4 antialiased w-full flex flex-row justify-start text-purple-300 text-lg gap-x-4 py-4`}>
+            <div className={`${f2.className} px-2 sm:px-4 antialiased w-full flex flex-row justify-start text-purple-300 text-sm sm:text-lg gap-x-2 sm:gap-x-4 py-4`}>
                 <div className="flex flex-row items-center justify-center gap-x-3 border rounded-xl border-purple-300 hover:border-slate-300 hover:text-slate-300 px-2">
                         <ShareButton/>
                     </div>

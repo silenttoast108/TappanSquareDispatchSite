@@ -29,21 +29,20 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <div className = 'w-full h-full bg-black'>
-          <header className={`${epilogue.className} antialiased flex flex-row justify-center py-4 sm:px-6 text-purple-300 text-[23px] sm:text-[30px] bg-black w-full border-b border-b-1 border-b-slate-300`}>
+          <header className={`${epilogue.className} antialiased flex flex-row justify-center py-4 sm:px-6 text-purple-300 text-[25px] md:text-[40px] bg-black w-full border-b border-b-1 border-b-slate-300`}>
             <div className="flex flex-0 justify-start ml-5">
               <BackButton />
             </div>
             <div className="flex flex-1 justify-center">
               <Link className="hover:text-purple-50" href="/">Home</Link>
-              <div className="mx-4 h-9 w-0.75 bg-purple-300"></div>
+              <div className="mx-4 h-9 md:h-12 w-0.75 bg-purple-300"></div>
               <Link className="hover:text-purple-50" href="/con">Contact Us</Link>
-              <div className="mx-4 h-9 w-0.75 bg-purple-300"></div>
+              <div className="mx-4 h-9 md:h-12 w-0.75 bg-purple-300"></div>
               <Link className="hover:text-purple-50" href="/atr">Attributions</Link>
             </div>
           </header>
           {children}
         </div>
-      
       </body>
     </html>
   );

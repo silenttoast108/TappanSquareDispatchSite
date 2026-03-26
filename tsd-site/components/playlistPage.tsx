@@ -64,7 +64,7 @@ export default function PlaylistPage({
             <ul className="gap-y-4 px-20 mx-auto w-full mb-50">
                 {storyPosts.map((post: storyPost, i) => (
                 <li className="my-2" key={i}>
-                    <div className={`${fonts[1]} z-1 group text-slate-300 antialiased flex flex-row p-2 my-2 justify-between items-center`}>
+                    <div className={`${fonts[1]} z-1 group text-slate-300 antialiased flex sm:flex-row flex-col p-2 my-2 justify-between items-center`}>
                         <div className="relative flex flex-col">
                             <h2 className="group-hover:underline text-2xl pb-1 font-semibold">{post.title || "null"}</h2>
                             <p className='text-lg pb-4 max-h-[145px] overflow-hidden'>{`By ${post.contributors}`}</p>
@@ -73,9 +73,9 @@ export default function PlaylistPage({
                             </div>       
                             <a href={`/${slug}/${post.storySlug}`} className="absolute w-full h-full top-0 left-0"></a>        
                         </div>
-                        <button onClick={(_e) => {handleStorySelect(i)}} className="relative w-[170px] h-[170px] flex-shrink-0 rounded-full overflow-hidden cursor-pointer appearance-none border-none bg-gray-200">
+                        <button onClick={(_e) => {handleStorySelect(i)}} className="relative w-[250px] h-[170px] my-[10px] sm:my-0 sm:w-[200px] sm:h-[200px] flex-shrink-0 rounded-full border-1 border-slate-300 sm:border-0 overflow-hidden cursor-pointer appearance-none bg-transparent">
                             <img
-                                className="rounded-full transition-filter duration-300 group-hover:brightness-50 border border-slate-300 border-1"
+                                className="rounded-full transition-filter duration-300 group-hover:brightness-50 sm:border-slate-300 sm:border-1 w-[250px] h-[170px] sm:w-[200px] sm:h-[200px]"
                                 src={urlFor(post.image)
                                 .width(300)
                                 .height(300)
@@ -83,7 +83,7 @@ export default function PlaylistPage({
                                 alt={`Image for ${post.title}`}
                             />
 
-                            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+                            <div className="absolute rounded-full inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
                                 <div className="bg-white/20 backdrop-blur-sm p-3 rounded-full border border-white/50">
                                 <svg 
                                     className="w-8 h-8 text-white fill-current" 

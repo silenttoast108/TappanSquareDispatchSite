@@ -16,8 +16,8 @@ export default function contactPage({fonts, slug}: CInput) {
                         <span className="col-span-3"></span>
                         <span className="col-span-2 border-r-2 border-y-2 border-purple-300"></span>
                     </div>
-                    <div className={`${fonts[1]} absolute inset-0 flex flex-col items-center justify-center px-[14%] gap-y-2 h-70`}>
-                        <h2 className={`${fonts[0]} font-bold text-[35px]`}>Contact Us!</h2>
+                    <div className={`${fonts[1]} antialiased absolute inset-0 flex flex-col items-center justify-center px-[14%] gap-y-2 h-70`}>
+                        <h2 className={`${fonts[0]} antialiased font-bold text-[35px]`}>Contact Us!</h2>
                         <hr className="w-full border border-purple-300 border-0.5 mb-5"/>
                         <div className="flex flex-row gap-4">
                             <a href="https://www.instagram.com/thetappansquaredispatch">
@@ -46,7 +46,7 @@ export default function contactPage({fonts, slug}: CInput) {
                         <span className="col-span-3"></span>
                         <span className="col-span-2 border-r-2 border-y-2 border-purple-300"></span>
                     </div>
-                    <div className={`${fonts[1]} absolute inset-0 flex flex-col items-center justify-center px-[14%] gap-y-2 h-75`}>
+                    <div className={`${fonts[1]} antialiased absolute inset-0 flex flex-col items-center justify-center px-[14%] gap-y-2 h-75`}>
                         {/* <div className="bg-transparent p-6 color-slate-300"> */}
                             <h2 className={`text-center`}>This website was created by Ben Giesen OC '26</h2>
                             <hr className="w-full border border-purple-300 border-0.5"/>
@@ -60,7 +60,16 @@ export default function contactPage({fonts, slug}: CInput) {
         )
     } else {
         return (
-            <></>
-        )
+            <div className="flex min-h-screen items-center justify-center bg-muted">
+                <div className={`flex flex-col ${fonts[1]} items-center antialiased text-center`}>
+                    <h1 className="mb-4 text-4xl font-bold">404</h1>
+                    <p className="mb-1 text-xl text-muted-foreground">Page not found :/</p>
+                    <hr className='mb-4 w-[120%] border-1 border-slate-300'/>
+                    <a href="/" className="text-xl hover:underline ">
+                        Return to Home
+                    </a>
+                </div>
+            </div>
+        );
     }
 }
