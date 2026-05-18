@@ -112,10 +112,18 @@ export function HomePage({posts, fonts}: HPInput) {
             for (const ref of refArr) {
                 let b = ref.current?.getBoundingClientRect()
                 if (b) {
+                    let yWeight;
+                    if (window.innerWidth < 375) {
+                        yWeight = -(b.height)/2;
+                    } else if (window.innerWidth < 641) {
+                        yWeight = -(b.height)/8;
+                    } else {
+                        yWeight = (b.height)/3;
+                    }
                     newCoords.push (
                         [
                             b.x + window.scrollX + (b.width)/2,
-                            b.y + window.scrollY + (b.height)/3
+                            b.y + window.scrollY + yWeight
                         ]
                     )
                 }
