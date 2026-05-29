@@ -2,8 +2,7 @@
 
 import TextLoop from './textloop'
 import { useState, useRef, useEffect, MouseEventHandler, MouseEvent, } from "react";
-// import Slider from '@mui/material/slider'
-// import Math from "next"
+
 import {
     RotateCcw,
     RotateCw,
@@ -35,9 +34,6 @@ export interface audioTrack {
 // export const AudioWidget = forwardRef<HTMLDivElement, AWprops>(({open, startTrackInd, trackArr, font, skip}: AWprops, ref) => {
 export function AudioWidget({open, startTrackInd, trackArr, font, skip, playing, onClose}: AWprops) { //may need to alter somethings for ref to work , ref: Ref<AWprops> | undefined
 
-    // console.log(`widget prop: ${open}`);
-    // console.log(`widget prop: ${startTrackInd}`)
-
     const [isOpen, setIsOpen] = useState(open);
     const [isPlaying, setIsPlaying] = useState(playing);
     const [activeTrackInd, setActiveTrackInd] = useState(startTrackInd);
@@ -45,12 +41,6 @@ export function AudioWidget({open, startTrackInd, trackArr, font, skip, playing,
     const [duration, setDuration] = useState(0);
     const [progress, setProgress] = useState(0);
     const audioRef = useRef<HTMLAudioElement|null>(null);
-
-    // const handleClose = () => {
-    //     //setIsOpen(false);
-    //     open = false;
-    //     console.log(open);
-    // }
 
     const playPause = () => {
         if (isPlaying) {
@@ -206,9 +196,3 @@ export function AudioWidget({open, startTrackInd, trackArr, font, skip, playing,
         </div>
     )
 }
-
-// export function AudioWidget({open, startTrackInd, trackArr, font, skip}: AWprops) {
-
-//     //var trackArr: audioTrack[] = [];
-    
-// }
