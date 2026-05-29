@@ -1,7 +1,7 @@
 'use client'
 
 import TextLoop from './textloop'
-import { useState, useRef, useEffect, MouseEventHandler, } from "react";
+import { useState, useRef, useEffect, MouseEventHandler, MouseEvent, } from "react";
 // import Slider from '@mui/material/slider'
 // import Math from "next"
 import {
@@ -79,22 +79,11 @@ export function AudioWidget({open, startTrackInd, trackArr, font, skip, playing,
         return `${tMinutes}:${(tSeconds<10)? '0': ''}${tSeconds}/${dMinutes}:${(dSeconds<10)? '0': ''}${dSeconds}`
     }
 
-    // const handleSlider = (_e: Event, value: number) => {
-    //     if (audioRef.current) {
-    //         const prog = cleanDivide(value, 100);
-    //         const newTime = prog*duration;
-    //         audioRef.current.currentTime = prog*duration;
-    //         setTrackTime(prog*duration);
-    //         setProgress(prog);
-    //     }
-    // }
-
-    const handleTimeUpdate = () => {//update progress?
+    const handleTimeUpdate = () => {
         if (audioRef.current) {
             setTrackTime(audioRef.current?.currentTime);
             setProgress(trackTime/duration || 0);
         };
-
     }
 
     const handleMetaData = () => {
@@ -108,9 +97,7 @@ export function AudioWidget({open, startTrackInd, trackArr, font, skip, playing,
             setTrackTime(0);
         } else if (audioRef.current) {//might be a good solution
             audioRef.current.currentTime = duration;
-            //audioRef.current.pause();
             setTrackTime(duration);
-            //if (isPlaying) audioRef.current.play();
         }
     }
 
@@ -120,7 +107,7 @@ export function AudioWidget({open, startTrackInd, trackArr, font, skip, playing,
         } else if (audioRef.current) {
             audioRef.current.currentTime = 0
             setTrackTime(0);
-            audioRef.current.load();//necesary???
+            audioRef.current.load();
             if (isPlaying) audioRef.current.play()
         }
     }
@@ -148,29 +135,30 @@ export function AudioWidget({open, startTrackInd, trackArr, font, skip, playing,
         }
     }
 
+    const closePause = (event: MouseEvent<Element, globalThis.MouseEvent>) => {
+        if (isPlaying) {
+            setIsPlaying(false);
+            audioRef.current?.pause();
+        }
+        if (onClose) {
+            onClose(event);
+            console.log('On Close');
+        }
+    }
+
     useEffect(() => {//this is because internal state is reset during component re-mount in dev mode
         setIsOpen(open);
     }, [open]);
 
-    useEffect(() => {//same reason
-        setActiveTrackInd(startTrackInd)
-    }, [startTrackInd]);
-
-    useEffect(() => {//might need to set ref.current.currentTime to 0
+    useEffect(() => {
         if (audioRef.current) {       
             audioRef.current.pause();
             audioRef.current.src = trackArr[activeTrackInd].src;
             audioRef.current.load();
-            audioRef.current.currentTime = 0; //right spot???
+            audioRef.current.currentTime = 0;
             if (isPlaying) audioRef.current?.play();
         }
     }, [trackArr, activeTrackInd]); //isPlaying
-
-    //handleTimeUpdate!!
-    //figure out how to add dragging capabiliyties with progress...
-    //rember to initialize audioRef
-    // console.log(`widget useState: ${isOpen}`);
-    // console.log(`widget useState: ${activeTrackInd}`)
 
     return (
         <div 
@@ -187,14 +175,13 @@ export function AudioWidget({open, startTrackInd, trackArr, font, skip, playing,
                     </div>
                     {   
                         skip? 
-                            <span onClick={onClose} className='flex-initial hover:cursor-pointer border border-[#02021C] hover:border-slate-300 rounded-md ml-4 mb-1'>
+                            <span onClick={(e) => {closePause(e)}} className='flex-initial hover:cursor-pointer border border-[#02021C] hover:border-slate-300 rounded-md ml-4 mb-1'>
                                 <X/>
                             </span>
                         : <></>
                     }  
                 </div> 
                 
-                {/* solve at a later date <Slider size='small' aria-label="Volume" value={progress*100} onChange={handleSlider} /> */}
                 <progress className="w-7/8 mx-40 h-[5px] [&::-webkit-progress-bar]:rounded-lg [&::-webkit-progress-value]:rounded-lg [&::-webkit-progress-bar]:bg-slate-900 [&::-webkit-progress-value]:bg-slate-300 [&::-moz-progress-bar]:bg-purple-300" value={progress}></progress>
                 <div className="flex flex-row gap-x-6 hover:cursor-pointer items-center">
                     <div onClick={hopBackward} className="flex flex-row gap-x-2 text-sm select-none items-center">
