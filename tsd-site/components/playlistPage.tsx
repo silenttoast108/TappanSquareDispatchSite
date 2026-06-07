@@ -1,6 +1,8 @@
 'use client'
-import { PortableText, PortableTextBlock, SanityImageAssetDocument } from "next-sanity"
-import { AudioWidget, audioTrack} from "./audioWidget"
+import { SanityImageAssetDocument } from "next-sanity";
+import { PortableText } from "@portabletext/react";
+import { PortableTextBlock } from "@portabletext/types";
+import { AudioWidget, audioTrack} from "./audioWidget";
 import { useState, useRef, useEffect, use } from "react";
 import { urlFor } from "@/app/sanity/sanityImageUrl";
 
