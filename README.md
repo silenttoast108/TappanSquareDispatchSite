@@ -28,12 +28,23 @@ To start the development environment on your machine, follow these steps:
    git clone [repository-url]
    cd [repository-folder]
 
-2. **Start Next.js App**
+2. **Install Frontend Deps:**
    ```bash
-   cd \tsd-site\
+   cd tsd-site/
+   npm i -y
+
+3. **Install Backend Deps:**
+   ```bash
+   cd ../studio-tappan-square-dispatch/
+   npm i -y
+   
+4. **Start Sanity.io**
+   ```bash
+   cd studio-tappan-square-dispatch/
+   npm run dev
+   
+5. **Start Next.js App**
+   ```bash
+   cd ../tsd-site/
    npm run dev
  
-3. **Start Sanity.io**
-   ```bash
-   cd studio-tappan-square-dispatch
-   npm run dev
