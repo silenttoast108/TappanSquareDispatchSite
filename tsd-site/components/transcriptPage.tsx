@@ -1,13 +1,13 @@
-// 'use client'
-
 import { Oleo_Script, Epilogue } from "next/font/google";
-import {SanityImageAssetDocument, PortableText, PortableTextBlock, type SanityDocument } from "next-sanity";
+//import {SanityImageAssetDocument, PortableText, PortableTextBlock, type SanityDocument } from "next-sanity";
+import { SanityImageAssetDocument } from "next-sanity";
+import { PortableText } from "@portabletext/react";
+import { PortableTextBlock } from "@portabletext/types";
 import Link from "next/link";
 import { Download, Share2 } from 'lucide-react'
 import { urlFor } from "@/app/sanity/sanityImageUrl";
 import { AudioWidget } from "./audioWidget";
 import ShareButton from "./shareButton";
-// import { useRef, useEffect, useState, useLayoutEffect } from "react";
 
 const f2 = Epilogue({
     subsets: ["latin"]
