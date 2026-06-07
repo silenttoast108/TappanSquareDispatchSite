@@ -1,13 +1,13 @@
 # Tappan Square Dispatch Website
 
-This repository contains the source code for the TSD Website, a custom-built digital home for immersive, community-focused storytelling. Developed under the guidance of Oberlin Professor Jan Cooper, this project serves as a bridge between the student body and the local college town, providing a "Wix-style" interface for journalists to publish long-form audio content.
+This repository contains the source code for the TSD Website, a custom-built digital home for immersive, community-focused storytelling. This project serves as a bridge between the student body and the local college town, providing a "Wix-style" interface for journalists to publish long-form audio content.
 
 ---
 
 ### Key Features:
 * **Content Editor:** Custom admin interface for publishing interactive articles.
-* **Robust Audio Integration:** Custom-built players designed for long-form investigative journalism.
-* **Scalable Data Library:** Years of archived podcast data migrated and structured for high-performance retrieval.
+* **Audio Integration:** Custom-built players designed for long-form investigative journalism.
+* **Data Library:** Years of archived podcast data migrated and structured for high-performance retrieval.
 
 ---
 
