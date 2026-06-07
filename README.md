@@ -30,7 +30,7 @@ To start the development environment on your machine, follow these steps:
 
 2. **Install Frontend Deps:**
    ```bash
-   cd tsd-site/
+   cd /tsd-site/
    npm i -y
 
 3. **Install Backend Deps:**
@@ -40,7 +40,7 @@ To start the development environment on your machine, follow these steps:
    
 4. **Start Sanity.io**
    ```bash
-   cd studio-tappan-square-dispatch/
+   cd /studio-tappan-square-dispatch/
    npm run dev
    
 5. **Start Next.js App**
